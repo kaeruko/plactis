@@ -1,0 +1,74 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="ja" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <title>Canvastest</title>
+  </head>
+  <body>
+    <h1>Canvas</h1>
+    <canvas id="canvassample" width="400" height="400"></canvas>
+<script type="text/javascript">
+var canvas = document.getElementById("canvassample");
+var ctx = canvas.getContext('2d');
+var cnt = 0;
+
+//時計盤
+function circle()
+{
+  ctx.beginPath();
+  ctx.arc(200, 200,150, 0,Math.PI*2,true)
+  ctx.closePath();
+  ctx.stroke();
+}
+
+//秒針
+function byosin()
+{
+  ctx.beginPath();
+  ctx.moveTo(200,200);
+
+  var t = Math.PI/60 * cnt - 0.5 * Math.PI ;
+  var x = 200+ 150 * Math.cos(t);
+  var y = 200+ 150 * Math.sin(t);
+  cnt ++;
+  ctx.lineTo(x,y);
+  ctx.closePath();
+  ctx.stroke();
+  minuts ++;
+  if(minuts > 60 ){
+  hour();
+  }
+}
+
+//分針
+function minutsup()
+{
+}
+
+function countup()
+{
+//消す
+ctx.clearRect(0,0,400,400);
+
+//時計盤を描く
+circle();
+//秒針を動かす
+byosin();
+
+}
+
+setInterval(countup,1000);
+
+
+
+</script>
+
+</body>
+</html>
+
