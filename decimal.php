@@ -4,7 +4,7 @@ foreach ($args as $arg) {
     $ret = toDecimal($arg);
     echo $ret;
 }
-
+$ans = 0;
 
 function toDecimal($num){
     $num = str_split($num);
