@@ -29,10 +29,11 @@ int main(int argc, char *argv[])
     fp = fopen(file, "rb");
 
     //1行読み込む
-    fread(&inbuf, sizeof( file ), 1, fp);
+    fread(&inbuf, sizeof( inbuf ), 4, fp);
 
     //バイナリ形式で出力
-    printf("%d\n", inbuf);
+    printf("%x\n", inbuf);
+    printf("%f\n", sizeof( inbuf ));
 
     //inbufを別のファイルに書き込む
 
