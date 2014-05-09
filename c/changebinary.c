@@ -6,8 +6,7 @@ int main(int argc, char const *argv[])
 
     FILE *fp;
     //引数はファイル名を指定
-//    char file[256] = argv[1];
-    char file[256] = "aaa.txt";
+    char file[256] = argv[1];
     //引数にファイルを指定する
     printf("%s\n", argv[1]);
 
