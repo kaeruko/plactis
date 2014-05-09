@@ -41,11 +41,7 @@ int main(int argc, char *argv[])
         //1行ずつ読み込み
         printf("%02x ", inbuf[i]);
         //inbufを別のファイルに書き込む
-<<<<<<< HEAD
         fwrite(inbuf, sizeof( unsigned char ), linecount, outfp);
-=======
-        fwrite(&inbuf, sizeof( unsigned char ), 10000, outfp);
->>>>>>> 79e2e04ae896e7263c69095cd5f93d6d93707918
     }
 
 
