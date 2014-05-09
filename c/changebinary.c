@@ -5,13 +5,16 @@
 int main(int argc, char *argv[])
 {
 
-    FILE *fp;
+    FILE *infp;
+    FILE *outfp;
     //file存在チェック用
     struct stat st;
     //読み込みバッファ。binaryが入ってる
-    int inbuf;
+    unsigned char inbuf[10000];
+//    unsigned char outbuf[10000];
     //書き込みバッファ
-    int outbuf;
+    int linecount,i;
+    char outfile[] = "output.dat";
 
     //引数はファイル名を指定
     char *file = argv[1];
@@ -26,18 +29,24 @@ int main(int argc, char *argv[])
     }
 
     //バイナリ形式で開く
-    fp = fopen(file, "rb");
+    infp = fopen(file, "rb");
+    outfp = fopen(outfile, "wb");
 
-    //1行読み込む
-    fread(&inbuf, sizeof( inbuf ), 4, fp);
+    linecount = fread(&inbuf, sizeof( unsigned char ), 10000, infp);
 
-    //バイナリ形式で出力
-    printf("%x\n", inbuf);
-    printf("%f\n", sizeof( inbuf ));
+    for (i = 0; i < linecount; ++i)
+    {
 
-    //inbufを別のファイルに書き込む
+        if(inbuf[i] == 0x0a || inbuf[i] == 0x0d)printf("\n");
+        //1行ずつ読み込み
+        printf("%02x ", inbuf[i]);
+        //inbufを別のファイルに書き込む
+        fwrite(inbuf, sizeof( unsigned char ), linecount, outfp);
+    }
 
-    fclose(fp);
+
+    fclose(infp);
+    fclose(outfp);
 
     return 0;
 }
