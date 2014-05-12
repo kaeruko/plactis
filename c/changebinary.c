@@ -11,9 +11,9 @@ int main(int argc, char *argv[])
     struct stat st;
     //読み込みバッファ。binaryが入ってる
     unsigned char inbuf[10000];
-//    unsigned char outbuf[10000];
     //書き込みバッファ
-    int linecount,i;
+//    unsigned char outbuf[10000];
+    int count,i;
     char outfile[] = "output.dat";
 
     //引数はファイル名を指定
@@ -32,18 +32,18 @@ int main(int argc, char *argv[])
     infp = fopen(file, "rb");
     outfp = fopen(outfile, "wb");
 
-    linecount = fread(&inbuf, sizeof( unsigned char ), 10000, infp);
+    count = fread(&inbuf, sizeof( unsigned char ), 10000, infp);
 
-    for (i = 0; i < linecount; ++i)
+    for (i = 0; i < count; ++i)
     {
-
+        printf("count %d\n", count);
         if(inbuf[i] == 0x0a || inbuf[i] == 0x0d)printf("\n");
         //1行ずつ読み込み
-        printf("%02x ", inbuf[i]);
+//        printf("%02x ", inbuf[i]);
         //inbufを別のファイルに書き込む
-        fwrite(inbuf, sizeof( unsigned char ), linecount, outfp);
+        fprintf(outfp, "%02x", inbuf[i]);
+//        fwrite(inbuf, sizeof( int ), count, outfp);
     }
-
 
     fclose(infp);
     fclose(outfp);
