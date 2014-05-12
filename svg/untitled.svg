@@ -14,10 +14,28 @@
     <stop offset="100%" stop-color="#000000"/>
   </linearGradient>
 
+<linearGradient
+   id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+  <stop offset="0%" stop-color="#feb" />
+  <stop offset="50%" stop-color="#fc4" />
+  <stop offset="51%" stop-color="#fb0" />
+  <stop offset="100%" stop-color="#fd9" />
+</linearGradient>
+<linearGradient id="grad2-1" xlink:href="#grad1"
+                y2="100%" />
+<linearGradient id="grad2-2" xlink:href="#grad1"
+                y1="100%" y2="0%" />
 </defs>
 
-  <rect x="100" y="100" width="600" height="60" cx="100" cy="100" stroke="black" fill="url(#kukigage)" />
-  <circle cx="100" cy="130" r="30" stroke="black" style="fill:rgb(255,255,255);"  />
+<!-- <rect x="100" y="100" width="600" height="60"
+      cx="100" yy="10" stroke-width="4"
+      fill="url(#grad2-1)"
+      stroke="url(#grad2-2)" />
+ -->
+  <rect x="100" y="100" width="600" height="60" cx="100" cy="100" stroke="#264c38" stroke-width="2" fill="url(#kukigage)" />
+<!--   <circle cx="100" cy="130" r="30" stroke="#264c38" stroke-width="2" style="fill:rgb(255,255,255);"  />
+ --><ellipse cx="100" cy="130" rx="15" ry="30" stroke="#264c38" fill="white" stroke-width="2" />
+
 <!--      <circle cx="400" cy="150" r="50" stroke="black" style="fill:rgb(0,250,0)" /> -->
 <path d="
         M 700,100
