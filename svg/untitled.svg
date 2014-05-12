@@ -3,9 +3,9 @@
   <body>
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink">
-      <circle cx="100" cy="100" r="100" fill="green" />
-      <circle cx="100" cy="150" r="100" style="fill:rgb(0,200,100)" />
-      <rect x="100" y="100" width="300" height="100" fill="green" />
+      <circle cx="100" cy="150" r="50" fill="green" />
+      <circle cx="400" cy="150" r="50" style="fill:rgb(0,250,0)" />
+      <rect x="100" y="100" width="300" height="100" style="fill:rgb(0,200,100)" />
     </svg>
   </body>
 </html>
