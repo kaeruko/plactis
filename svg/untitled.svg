@@ -9,11 +9,32 @@
         <stop offset="0%"  style="stop-color:rgb(0,255,0);" />
         <stop offset="100%"  style="stop-color:rgb(255,255,255);" />
       </radialGradient>
+      <radialGradient id="happa" gradientUnits="userSpaceOnUse"
+                      cx="400" cy="200" r="300" fx="400" fy="200">
+        <stop offset="0%"  style="stop-color:rgb(0,85,46);" />
+        <stop offset="100%"  style="stop-color:rgb(255,255,255);" />
+      </radialGradient>
     </defs>
-
+      <rect x="100" y="100" width="300" height="100" cx="100" cy="100" stroke="black" fill="url(#MyGradient)" />
       <circle cx="100" cy="150" r="50" stroke="black" style="fill:rgb(255,255,255);"  />
-      <rect x="100" y="100" width="300" height="100" stroke="black" fill="url(#MyGradient)" />
-      <circle cx="400" cy="150" r="50" stroke="black" style="fill:rgb(0,250,0)" />
+<!--      <circle cx="400" cy="150" r="50" stroke="black" style="fill:rgb(0,250,0)" /> -->
+<path d="
+        M 400,100
+        L 620,90 620,110 400,120  Z
+        M 400,120
+        L 630,120 630,130 400,135 Z
+        M 400,135
+        L 630,135 630,150 400,150 Z
+        M 400,150
+        L 630,150 630,160 400,160 Z
+        M 400,160
+        L 630,160 660,180 400,180 Z
+        M 400,180
+        L 630,180 630,200 400,200 Z
+        M 400,200
+        "
+      stroke="#000000" fill="url(#happa)" />
+
     </svg>
   </body>
 </html>
