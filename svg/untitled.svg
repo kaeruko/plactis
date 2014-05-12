@@ -3,8 +3,16 @@
   <body>
     <svg xmlns="http://www.w3.org/2000/svg"
          xmlns:xlink="http://www.w3.org/1999/xlink">
-      <circle cx="100" cy="150" r="50" style="fill:rgb(0,200,100)" />
-      <rect x="100" y="100" width="300" height="100" style="fill:rgb(0,200,100)" />
+   <defs>
+      <radialGradient id="MyGradient" gradientUnits="userSpaceOnUse"
+                      cx="400" cy="200" r="300" fx="400" fy="200">
+        <stop offset="0%"  style="stop-color:rgb(0,255,0);" />
+        <stop offset="100%"  style="stop-color:rgb(255,255,255);" />
+      </radialGradient>
+    </defs>
+
+      <circle cx="100" cy="150" r="50" style="fill:rgb(200,240,200);stroke-opacity:rgb(255,255,0);"  />
+      <rect x="100" y="100" width="300" height="100" fill="url(#MyGradient)" />
       <circle cx="400" cy="150" r="50" style="fill:rgb(0,250,0)" />
     </svg>
   </body>
