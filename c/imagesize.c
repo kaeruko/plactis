@@ -2,6 +2,8 @@
 # include <stdlib.h>
 # include <sys/stat.h>
 
+int getSize(unsigned char buf[1000000], int *width, int *height);
+
 int main(int argc, char *argv[])
 {
     FILE *fp;
@@ -10,6 +12,7 @@ int main(int argc, char *argv[])
     //読み込みバッファ。binaryが入ってる
     unsigned char buf[1000000];
     int count;
+
     int width;
     int height;
 
@@ -30,13 +33,20 @@ int main(int argc, char *argv[])
 
     printf("count %d\n", count);
 
-    width = (buf[7] * 256) + (buf[6] * 1);
-    height = (buf[9] * 256) + (buf[8] * 1);
+    getSize(buf, &width, &height);
 
     printf("width: %d \n", width);
     printf("height %d \n", height);
 
     fclose(fp);
+
+    return 0;
+}
+
+int getSize(unsigned char buf[1000000], int *width, int *height)
+{
+    *width = (buf[7] * 256) + (buf[6] * 1);
+    *height = (buf[9] * 256) + (buf[8] * 1);
 
     return 0;
 }
