@@ -10,6 +10,8 @@ int main(int argc, char *argv[])
     //読み込みバッファ。binaryが入ってる
     unsigned char buf[100000000];
     int count;
+    int width;
+    int height;
 
     //引数はファイル名を指定
     char *file = argv[1];
@@ -28,8 +30,11 @@ int main(int argc, char *argv[])
 
     printf("%d\n", count);
 
-    printf("width: %d \n", (buf[7] * 256) + (buf[6] * 1));
-    printf("height %d \n", (buf[9] * 256) + (buf[8] * 1));
+    width = (buf[7] * 256) + (buf[6] * 1);
+    height = (buf[9] * 256) + (buf[8] * 1);
+
+    printf("width: %d \n", width);
+    printf("height %d \n", height);
 
     fclose(fp);
 
