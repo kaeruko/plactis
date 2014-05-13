@@ -19,6 +19,12 @@ int main(int argc, char *argv[])
     //引数はファイル名を指定
     char *file = argv[1];
 
+    if(argc < 2)
+    {
+        printf("画像ファイル名を指定して下さい ./a.out sample.gif \n");
+        return 0;
+    }
+
     //ファイル存在チェック。エラーの場合は-1
     if(stat(file, &st) != 0)
     {
