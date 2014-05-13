@@ -2,7 +2,7 @@
 # include <stdlib.h>
 # include <sys/stat.h>
 
-int getSize(unsigned char buf[1000000], int *width, int *height);
+int getSize(unsigned char *buf, int *width, int *height);
 
 int main(int argc, char *argv[])
 {
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-int getSize(unsigned char buf[1000000], int *width, int *height)
+int getSize(unsigned char *buf, int *width, int *height)
 {
     *width = (buf[7] * 256) + (buf[6] * 1);
     *height = (buf[9] * 256) + (buf[8] * 1);
