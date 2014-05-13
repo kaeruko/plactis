@@ -26,7 +26,8 @@ int main(int argc, char *argv[])
 
     count = fread(&buf, sizeof( unsigned char ), 10000, fp);
 
-    printf("width: %d height: %d \n", buf[6], buf[8]);
+    printf("width: %d \n", (buf[7] * 256) + (buf[6] * 1));
+    printf("height %d \n", (buf[9] * 256) + (buf[8] * 1));
 
     fclose(fp);
 
