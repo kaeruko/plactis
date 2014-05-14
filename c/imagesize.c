@@ -2,6 +2,8 @@
 # include <stdlib.h>
 # include <sys/stat.h>
 
+#define BUFSIZE 1000000
+
 int getSize(unsigned char *buf, int *width, int *height);
 
 int main(int argc, char *argv[])
@@ -10,7 +12,7 @@ int main(int argc, char *argv[])
     //file存在チェック用
     struct stat st;
     //読み込みバッファ。binaryが入ってる
-    unsigned char buf[1000000];
+    unsigned char buf[BUFSIZE];
     int count;
 
     int width;
@@ -35,7 +37,7 @@ int main(int argc, char *argv[])
     //バイナリ形式で開く
     fp = fopen(file, "rb");
 
-    count = fread(&buf, sizeof( unsigned char ), 1000000, fp);
+    count = fread(&buf, sizeof( unsigned char ), BUFSIZE, fp);
 
     printf("count %d\n", count);
 
