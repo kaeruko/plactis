@@ -2,8 +2,7 @@
 # include <stdlib.h>
 # include <sys/stat.h>
 
-#define BUFSIZE 1000000
-
+#define BUFSIZE 24
 int getSize(unsigned char *buf, int *width, int *height);
 
 int main(int argc, char *argv[])
