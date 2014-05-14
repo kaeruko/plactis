@@ -3,7 +3,7 @@
 # include <sys/stat.h>
 
 #define BUFSIZE 24
-int getSize(unsigned char *buf, int *width, int *height);
+int getSize(unsigned char *buf, int *width, int *height, int *sizetype);
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 
     int width;
     int height;
+    int sizetype;
 
     //引数はファイル名を指定
     char *file = argv[1];
@@ -40,7 +41,18 @@ int main(int argc, char *argv[])
 
     printf("count %d\n", count);
 
-    getSize(buf, &width, &height);
+    getSize(buf, &width, &height, &sizetype);
+
+    switch(sizetype){
+        case 1:
+            printf("gifです\n");
+            break;
+        case 2:
+            printf("pngです\n");
+            break;
+        default:
+        break;
+    }
 
     printf("width: %d \n", width);
     printf("height %d \n", height);
@@ -50,18 +62,20 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-int getSize(unsigned char *buf, int *width, int *height)
+int getSize(unsigned char *buf, int *width, int *height, int *sizetype)
 {
     //type gif
    if((buf[0]==0x47) && (buf[1]==0x49) && (buf[2]==0x46) && (buf[3]==0x38) ){
+        *sizetype = 1;
         *width = (buf[7] * 256) + (buf[6] * 1);
         *height = (buf[9] * 256) + (buf[8] * 1);
    }
 
    //type png
    if((buf[0]==0x89) && (buf[1]==0x50) && (buf[2]==0x4e) && (buf[3]==0x47) ){
-     *width = (buf[16] * 0x1000000) + (buf[17] * 0x10000) + (buf[18] * 0x100) + (buf[19]);
-     *height = (buf[20] * 0x1000000) + (buf[21] * 0x10000) + (buf[22] * 0x100) + (buf[23]);
+        *sizetype = 2;
+        *width = (buf[16] * 0x1000000) + (buf[17] * 0x10000) + (buf[18] * 0x100) + (buf[19]);
+        *height = (buf[20] * 0x1000000) + (buf[21] * 0x10000) + (buf[22] * 0x100) + (buf[23]);
    }
     return 0;
 }
