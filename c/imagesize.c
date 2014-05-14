@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     if(argc < 2)
     {
-        printf("画像ファイル名を指定して下さい sample.gif \n");
+        printf("usage: imagesize [file ...] \n");
         return 1;
     }
 
