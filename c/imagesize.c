@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     if(argc < 2)
     {
-        printf("画像ファイル名を指定して下さい ./a.out sample.gif \n");
+        printf("画像ファイル名を指定して下さい sample.gif \n");
         return 1;
     }
 
@@ -38,8 +38,6 @@ int main(int argc, char *argv[])
     fp = fopen(file, "rb");
 
     count = fread(&buf, sizeof( unsigned char ), BUFSIZE, fp);
-
-    printf("count %d\n", count);
 
     getSize(buf, &width, &height, &sizetype);
 
