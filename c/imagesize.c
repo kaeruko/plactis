@@ -59,8 +59,8 @@ int getSize(unsigned char *buf, int *width, int *height)
 
    //type png
    if((buf[0]==0x89) && (buf[1]==0x50) && (buf[2]==0x4e) && (buf[3]==0x47) ){
-        *width = (buf[16] * 65536) + (buf[17] * 4096) + (buf[18] * 256) + (buf[19] * 1);
-        *height = (buf[20] * 65536) + (buf[21] * 4096) + (buf[22] * 256) + (buf[23] * 1);
+     *width = (buf[16] * 0x1000000) + (buf[17] * 0x10000) + (buf[18] * 0x100) + (buf[19]);
+     *height = (buf[20] * 0x1000000) + (buf[21] * 0x10000) + (buf[22] * 0x100) + (buf[23]);
    }
     return 0;
 }
