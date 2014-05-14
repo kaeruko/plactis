@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     if(argc < 2)
     {
-        printf("usage: imagesize [file ...] \n");
+        printf("usage: imagesize FILE \n");
         return 1;
     }
 
