@@ -22,14 +22,14 @@ int main(int argc, char *argv[])
     if(argc < 2)
     {
         printf("画像ファイル名を指定して下さい ./a.out sample.gif \n");
-        return 0;
+        return 1;
     }
 
     //ファイル存在チェック。エラーの場合は-1
     if(stat(file, &st) != 0)
     {
         printf("%sは存在しません\n", file);
-        return 0;
+        return 2;
     }
 
     //バイナリ形式で開く
@@ -51,8 +51,16 @@ int main(int argc, char *argv[])
 
 int getSize(unsigned char *buf, int *width, int *height)
 {
-    *width = (buf[7] * 256) + (buf[6] * 1);
-    *height = (buf[9] * 256) + (buf[8] * 1);
+    //type gif
+   if((buf[0]==0x47) && (buf[1]==0x49) && (buf[2]==0x46) && (buf[3]==0x38) ){
+        *width = (buf[7] * 256) + (buf[6] * 1);
+        *height = (buf[9] * 256) + (buf[8] * 1);
+   }
 
+   //type png
+   if((buf[0]==0x89) && (buf[1]==0x50) && (buf[2]==0x4e) && (buf[3]==0x47) ){
+        *width = (buf[16] * 65536) + (buf[17] * 4096) + (buf[18] * 256) + (buf[19] * 1);
+        *height = (buf[20] * 65536) + (buf[21] * 4096) + (buf[22] * 256) + (buf[23] * 1);
+   }
     return 0;
 }
