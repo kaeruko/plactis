@@ -97,20 +97,20 @@ $indexlink = new indexlink($argv[1]);
 
 print "参照されてないhtm\n";
 foreach ($indexlink->notrefs as  $notrefs) {
-    print $notrefs."\n";
+    print "    ".$notrefs."\n";
 }
 
 print "存在しないhtm\n";
 foreach ($indexlink->notexist as $notexist) {
-    print $notexist."\n";
+    print "    ".$notexist."\n";
 }
 
 print "存在しないhtmを参照しているhtm\n";
 foreach ($indexlink->errorlink as $errorlink => $urls ) {
-    print "参照元:".$errorlink."\n";
+    print "    参照元:".$errorlink."\n";
     $urls = array_unique($urls);
     foreach ($urls as $url) {
-        print "$url\n";
+        print "        $url\n";
     }
 }
 
