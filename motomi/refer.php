@@ -10,9 +10,9 @@ foreach($allhtmls as $id => $html_full){
     //ディレクトリ名とファイル名を分ける
     preg_match('/^.*?\/(.*)\/(.*\.htm)/', $html_full, $matches);
     $dir = $matches[1];
-    $htm = $matches[2];
-    $refers[] = $htm;
-    $refers = array_merge( refer($dir, $htm), $refers);
+    $html = $matches[2];
+    $refers[] = $dir."/".$html;
+    $refers = array_merge( refer($dir, $html), $refers);
 }
 
 $count_refers = array_count_values($refers);
@@ -32,7 +32,7 @@ function refer( $dir, $html ){
        if(strpos($url, "http", 0) === 0 ||
         strpos($url, "mail", 0) === 0 ||
         strpos($url, "#", 0) === 0) return false;
-        return $url;
+        return $dir."/".$url;
     };
 
     return array_filter(array_map($add_dir, $matches[1]));
