@@ -16,7 +16,7 @@ foreach ($indexfiles as $key => $indexfile) {
     $refDepthCount[$dir."/".$html] = 0;
 }
 
-$count = 0;
+$count = 1;
 while($count < 5){
     foreach (array_keys($refDepthCount) as $htmlile) {
         $tmp = explode("/", $htmlile);
