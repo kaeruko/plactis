@@ -16,19 +16,24 @@ foreach ($indexfiles as $key => $indexfile) {
     $refDepthCount[$dir."/".$html] = 0;
 }
 
-while(5){
-foreach (array_keys($refDepthCount) as $htmlile) {
-    $tmp = explode("/", $htmlile);
-    $dir = $tmp[count($tmp)-2];
-    $html = $tmp[count($tmp)-1];
-    $reffiles = refer($dir, $html, $workdir);
-    foreach ($reffiles as $reffile) {
-        if(isset($refDepthCount[$reffile]) === false){
-            $refDepthCount[$reffile] = 1;
+$count = 0;
+while($count < 5){
+    foreach (array_keys($refDepthCount) as $htmlile) {
+        $tmp = explode("/", $htmlile);
+        $dir = $tmp[count($tmp)-2];
+        $html = $tmp[count($tmp)-1];
+        $reffiles = refer($dir, $html, $workdir);
+        foreach ($reffiles as $reffile) {
+            if(isset($refDepthCount[$reffile]) === false){
+                $refDepthCount[$reffile] = $count;
+            }
         }
     }
+    $count ++;
 }
-};
+
+
+//};
 var_dump($refDepthCount);
 
 
