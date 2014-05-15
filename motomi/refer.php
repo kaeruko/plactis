@@ -3,7 +3,7 @@
 $workdir = $argv[1];
 
 //全htmlを取得
-$allhtmls = array_filter(explode("\n",shell_exec("ls ".$workdir."/*/*htm" )), 'strlen');
+$allhtmls = array_filter(explode("\n",shell_exec("ls ".$workdir."/*/*.ht*" )), 'strlen');
 
 //参照先リンクを保存
 foreach($allhtmls as $id => $html_full){
@@ -31,13 +31,8 @@ function refer( $dir, $html , $workdir){
     preg_match_all('/.+<?\shref=[\'|"](.*?)[\'|"].*/', $contents, $matches, PREG_PATTERN_ORDER);
 //var_dump($matches);
     $add_dir = function($url) use( $dir, $html) {
-
-        // if($url === $html)
-        //     print($url." ".$html."\n");
-
        if(strpos($url, "http", 0) === 0 ||
         strrpos($url, "htm", 0) === false || $url === $html) return false;
-
 
         return $dir."/".$url;
     };
