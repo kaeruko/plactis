@@ -9,6 +9,7 @@ class KaerukoMemcache
     function __construct(){
         $this->memcache = new Memcached();
         $this->memcache->addServer('localhost', 11211);
+        $this->retry_count = 0;
     }
 
     //getの場合
@@ -22,7 +23,7 @@ var_dump($cas_token);
     function cacheSet($cache_key){
         $count = $this->memcache->get($cache_key, null, $cas_token);
 var_dump($cas_token);
-        sleep(10);
+        sleep(7);
         if($this->memcache->getResultCode() == Memcached::RES_NOTFOUND){
             $count = 1;
             $this->memcache->add($cache_key, $count, 50);
@@ -31,8 +32,9 @@ var_dump($cas_token);
             ++$count;
             $ret = $this->memcache->cas($cas_token, $cache_key, $count);
             // $ret = $this->memcache->set($cache_key, $count);
-            if($ret === false){
+            if($ret === false && $this->retry_count < 3){
                 print "{$cache_key}の更新に失敗しました。 {$count}\n";
+                $this->retry_count++;
                 $this->cacheSet($cache_key);
             }else{
                 print "{$cache_key}を更新しました {$count}\n";
