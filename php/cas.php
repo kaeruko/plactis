@@ -26,14 +26,22 @@ var_dump($cas_token);
         sleep(7);
         if($this->memcache->getResultCode() == Memcached::RES_NOTFOUND){
             $count = 1;
-            $this->memcache->add($cache_key, $count, 50);
-            print "{$cache_key}を登録しました\n";
+            $ret = $this->memcache->add($cache_key, $count, 50);
+            if($ret){
+                print "{$cache_key}を登録しました\n";
+            }else{
+                print "{$cache_key}の登録に失敗しました ".$this->memcache->getResultMessage()."\n";
+            }
         }else{
             ++$count;
             $ret = $this->memcache->cas($cas_token, $cache_key, $count);
             // $ret = $this->memcache->set($cache_key, $count);
-            if($ret === false && $this->retry_count < 3){
-                print "{$cache_key}の更新に失敗しました。 {$count}\n";
+            if($ret === false){
+                if($this->retry_count > 2){
+                    print "システムエラーです\n";
+                    return;
+                }
+                print "{$cache_key}の更新に失敗しました。".$this->memcache->getResultMessage()."\n";
                 $this->retry_count++;
                 $this->cacheSet($cache_key);
             }else{
