@@ -1,35 +1,70 @@
 <?php
 
-$options = getopt("s:d:");
-$memcache = new Memcached();
-$memcache->addServer('localhost', 11211);
+class KaerukoMemcache
+{
 
-//setの場合
+    public $memcache;
+    public $cache_key;
+
+    function __construct(){
+        $this->memcache = new Memcached();
+        $this->memcache->addServer('localhost', 11211);
+    }
+
+    //getの場合
+    function cacheGet($cache_key){
+        $count = $this->memcache->get($cache_key, null, $cas_token);
+var_dump($cas_token);
+        print "{$cache_key}を取得しました {$count}\n";
+    }
+
+    //setの場合
+    function cacheSet($cache_key){
+        $count = $this->memcache->get($cache_key, null, $cas_token);
+var_dump($cas_token);
+        sleep(10);
+        if($this->memcache->getResultCode() == Memcached::RES_NOTFOUND){
+            $count = 1;
+            $this->memcache->add($cache_key, $count, 50);
+            print "{$cache_key}を登録しました\n";
+        }else{
+            ++$count;
+            $ret = $this->memcache->cas($cas_token, $cache_key, $count);
+            // $ret = $this->memcache->set($cache_key, $count);
+            if($ret === false){
+                print "{$cache_key}の更新に失敗しました。 {$count}\n";
+                $this->cacheSet($cache_key);
+            }
+            print "{$cache_key}を更新しました {$count}\n";
+        }
+    }
+
+
+    function cacheDelete($cache_key){
+        $count = $this->memcache->get($cache_key);
+        if($count){
+            $this->memcache->delete($cache_key);
+            print "{$cache_key}を削除しました {$count}\n";
+        }else{
+            print "{$cache_key}はありません\n";
+        }
+    }
+}
+
+
+$options = getopt("s:d:g:");
+$memcach_obj = new KaerukoMemcache();
+
 if(isset($options["s"])){
-    $cache_key = $options["s"];
-    $count = $memcache->get($cache_key, null, $cas_token);
-//var_dump($cas_token);
-    if($memcache->getResultCode() == Memcached::RES_NOTFOUND){
-        $count = 1;
-        $memcache->add($cache_key, $count, 50);
-        print "{$cache_key}を登録しました\n";
-    }else{
-        ++$count;
-        $memcache->cas($cas_token, $cache_key, $count);
-        print "{$cache_key}を更新しました {$count}\n";
-    }
+    $memcach_obj->cacheSet($options["s"]);
+}
+if(isset($options["g"])){
+    $memcach_obj->cacheGet($options["g"]);
+}
+if(isset($options["d"])){
+    $memcach_obj->cacheDelete($options["d"]);
 }
 
-//deleteの場合
-if(isset($options["d"])){
-    $cache_key = $options["d"];
-    $count = $memcache->get($cache_key);
-    if($count){
-        $memcache->delete($cache_key);
-        print "{$cache_key}を削除しました {$count}\n";
-    }else{
-        print "{$cache_key}はありません\n";
-    }
-}
+
 
 
