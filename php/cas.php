@@ -34,8 +34,9 @@ var_dump($cas_token);
             if($ret === false){
                 print "{$cache_key}の更新に失敗しました。 {$count}\n";
                 $this->cacheSet($cache_key);
+            }else{
+                print "{$cache_key}を更新しました {$count}\n";
             }
-            print "{$cache_key}を更新しました {$count}\n";
         }
     }
 
