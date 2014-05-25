@@ -1,0 +1,38 @@
+
+<script type="text/javascript">
+<!--
+var midi, inputs, outputs;
+var o, i;
+
+navigator.requestMIDIAccess({sysex:true}).then(scb, ecb);
+function scb(access){
+    midi = access;
+    outputs = midi.outputs();
+    o=outputs[0];
+    var inputname =[]
+    var outputname = []
+
+    inputs = midi.inputs();
+    for( li in inputs ){
+        inputname.push(inputs[li].name);
+        console.log("inputs[li] {");
+        console.log(inputs[li]);
+        console.log("} inputs[li]");
+        inputs[li].onmidimessage = function (midi) {
+            console.log(midi);
+        }
+
+    }
+
+
+}
+
+
+function ecb(msg){
+        console.log(msg);
+
+}
+
+-->
+</script>
+

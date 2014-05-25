@@ -19,7 +19,7 @@ asort($refers);
 //var_dump($refers);
 $count_refers = array_count_values($refers);
 asort($count_refers);
-//var_dump($count_refers);
+var_dump($count_refers["osake/centerinfo.html"]);
 foreach ($count_refers as $html => $count) {
     if($count == 1){
        print($html)."\n";

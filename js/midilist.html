@@ -9,38 +9,38 @@
 
 <script type="text/javascript">
 <!--
-var midi = null;  // グローバルなMIDIAccessオブジェクト
-function onMIDISuccess( midiAccess ) {
+"use strict;"
+var inputs = null;	//入力装置一覧
+var outputs = null;	//出力装置一覧
 
-	midi = midiAccess;  // グローバルに保存します (実際の使用ではおそらくオブジェクトのインスタンスに保持します)
-	var inputs = midi.inputs();
-	var outputs = midi.outputs();
+//装置が接続成功した時に呼ばれる
+function onMIDISuccess( midi ) {
+
+	//入力装置一覧と出力装置一覧は他の関数からも呼べるようにグローバルに保存
+	inputs = midi.inputs();
+	outputs = midi.outputs();
+
+	//装置の名前。selectタグで表示するために使う
 	var inputname =[]
 	var outputname = []
 
-
 	for( li in inputs ){
+		//入力装置の名前に追加
 		inputname.push(inputs[li].name);
+		console.log("inputs[li] {");
 		console.log(inputs[li]);
-		inputs[li].onmidimessage = function (midi) {
-			console.log(midi);
-		}
-
+		console.log("} inputs[li]");
 	}
 
-	var outputs = midi.outputs();
-
 	for (  ot in outputs ){
+		//出力装置の名前に追加
 		outputname.push(outputs[ot].name);
 	}
 
-	for(li in outputname)
-	{
-	}
-
-
+	//selectタグに追加。varってグローバル変数だっけ？
 	var selectInputs = document.getElementById("selectInputs");
-	selectInputs.onchange = change;
+	//selectした時に呼ばれるcallback変数
+	selectInputs.onchange = inputChange;
 	for(li in inputname){
 		//optionタグを作成
 		var element = document.createElement("option");
@@ -50,7 +50,7 @@ function onMIDISuccess( midiAccess ) {
 	}
 
 	var selectOutputs = document.getElementById("selectOutputs");
-	selectOutputs.onchange = change;
+	selectOutputs.onchange = outputChange;
 	for(li in outputname){
 		//optionタグを作成
 		var element = document.createElement("option");
@@ -59,28 +59,46 @@ function onMIDISuccess( midiAccess ) {
 		element.text = name;
 		selectOutputs.add(element);
 	}
-
  }
 
+//接続失敗時のcallback
 function onMIDIFailure(msg) {
-  console.log( "Failed to get MIDI access - " + msg );
+	console.log( "Failed to get MIDI access - " + msg );
 }
 
+//select時にselectされた装置のIDをグローバル変数に保存
 var selectedInput = null;
 var selectedOutput = null;
 
-function change(e){
-
-	if(e.srcElement.id ==  "selectInputs")
-	{
-			
-	}
-	console.log(e.srcElement.selectedIndex);
-	console.log(e.srcElement.id);
+//入力装置をselectした時のcallback
+function inputChange(e){
+	//装置のIDをグローバル変数に保存
+	selectedInput = e.srcElement.selectedIndex;
+	setonmidimessage();
 }
 
-navigator.requestMIDIAccess().then( onMIDISuccess, onMIDIFailure );
+function outputChange(e){
+	//装置のIDをグローバル変数に保存
+	selectedOutput = e.srcElement.selectedIndex;
+	console.log( "selectinput : " + selectedInput);
+	console.log( "selectedOutput : " + selectedOutput);
+	setonmidimessage();
+}
 
+function setonmidimessage(  ){
+
+	if( ( selectedInput  == null ) || ( selectedOutput ==  null ) ){
+		console.log(" undi  ");
+		return;
+	}
+
+	inputs[selectedInput].onmidimessage = function(midi){
+		outputs[selectedOutput].send(midi.data);
+	}
+}
+
+//装置が接続されてから起動。 装置の成功時、失敗時のcallback
+navigator.requestMIDIAccess().then( onMIDISuccess, onMIDIFailure );
 
 -->
 </script>
