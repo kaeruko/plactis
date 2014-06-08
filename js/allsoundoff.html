@@ -1,0 +1,43 @@
+
+<script type="text/javascript">
+<!--
+var midi, inputs, outputs;
+var o, i;
+
+navigator.requestMIDIAccess({sysex:true}).then(scb, ecb);
+function scb(access){
+    midi = access;
+    outputs = midi.outputs();
+    o=outputs[0];
+    var inputname =[]
+    var outputname = []
+
+    for( li in outputs ){
+        inputname.push(outputs[li].name);
+        console.log("outputs[li] {");
+        console.log(outputs[li]);
+        console.log("} outputs[li]");
+        for (var i = 0x00; i <= 0x0f; i++) {
+            soundoff = [0xB0 + i, 120, 0];
+            outputs[li].send(soundoff);
+        };
+    }
+}
+
+
+function ecb(msg){
+        console.log(msg);
+
+}
+-->
+</script>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>おーるさうんどおふ</title>
+  </head>
+  <body>
+    おーるさうんどおふ
+  </body>
+</html>
