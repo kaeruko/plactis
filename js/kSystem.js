@@ -1,53 +1,60 @@
-var kSystem = function(planet){
-    this.planet = planet;
+var kSystem = function(canvasId) {
     this.count = 0;
-    this.kc = new kCanvas("astorogy");
-    this.sun();
-    this.earth();
+    this.kc = new kCanvas(canvasId);
 }
 
-kSystem.prototype.planets = function(count){
-    this.count++;
-    this.earth();
+kSystem.prototype.addPlanet = function(pObj) {
+    this.planet = pObj;
 }
 
-kSystem.prototype.sun = function(){
-    this.sunPoint = [0,0];
-    var radius = 50;
-    var color = this.suncolor(this.sunPoint, radius);
-    this.kc.circle( this.sunPoint, radius, color );
+kSystem.prototype.putMother = function() {
+    //１秒の角度 * 進んだ数
+    var rad = Math.PI / this.kc.getPeriod(this.planet.period) * this.count;
+
+    this.planet.point = this.kc.rotate(rad, this.planet.distance);
+// console.debug(this.planet.point);
+    this.kc.circle(
+        this.planet.point,
+        this.planet.radius, this.planet.grad, rad,
+        this.planet.centerGap
+     );
 }
 
-kSystem.prototype.earth = function(point, distance){
-    if(!this.sunPoint){
-        return false;
-    }
-    var distance4mother = 5;
-    var radius = 20;
+kSystem.prototype.putAllSatellite = function(children) {
+    for (var i = 0; i < children.length; i++)  {
+        //衛星表示
+        this.putSatellite(children[i]);
+        if(children[i].children.length > 0) {
+            this.putAllSatellite(children[i].children);
+        }
+    };
 
-    this.earthpoint = [ this.sunPoint[0] + distance4mother, this.sunPoint[1] + distance4mother ];
-
-// console.debug(this.sunPoint);
-    var color = this.earthcolor(this.earthpoint, radius);
-    this.kc.rotate( this.earthpoint, this.count, distance );
-    this.kc.circle( this.earthpoint, radius, color );
 }
 
-kSystem.prototype.suncolor = function(point, radius) {
-    var point = this.kc.adjustPoint(point);
-    var grad  = this.kc.ctx.createRadialGradient(
-        point[0]   , point[1]
-        ,radius /2 ,
-        point[0]   , point[1]  ,
-        radius/1);
-    grad.addColorStop(0.8,"rgb(200, 0, 0)");
-    grad.addColorStop(0,"rgb(240, 204, 100)");
-    grad.addColorStop(0.9,"rgb(200, 100, 0)");
-    return grad;
+kSystem.prototype.putSatellite = function(st) {
+    //１回の角度 * 進んだ数
+    var theta = this.kc.degreeToRadian(st.period, this.count * -1);
+    st.point = this.kc.rotate(theta, st.distance);
+console.debug(st.name, " count: ", this.count, " rad: ",theta, " deg:", this.kc.rad2deg(theta) );
+
+    this.kc.circle(
+        [
+            st.point[0] + st.parent.point[0],
+            st.point[1] + st.parent.point[1]
+        ],
+        st.radius, st.grad, theta, st.centerGap
+     );
 }
 
-kSystem.prototype.earthcolor = function(point, radius, rad) {
+kSystem.prototype.draw = function() {
+    this.kc.ctx.clearRect( 0, 0, this.kc.canvasWidth, this.kc.canvasHeight);
+    this.kc.grid();
 
+    this.count ++;
 
+    //母星表示
+    this.putMother();
+    this.putAllSatellite(this.planet.children);
+    // this.kc.screenshot(this.count);
 }
 

@@ -11,13 +11,86 @@
   </head>
   <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
   <script type="text/javascript" charset="utf-8" src="kSystem.js"></script>
+  <script type="text/javascript" charset="utf-8" src="kPlanet.js"></script>
+  <script type="text/javascript" charset="utf-8" src="jszip.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="FileSaver.js"></script>
   <body>
     <canvas id="astorogy" width="600" height="600"></canvas>
 <script type="text/javascript">
 
-var kSystem = new kSystem(name);
+"use strict";
+var canvasId = "astorogy";
 
-setInterval("kSystem.planets()",500)
+var sun = new kPlanet("sun", 3, 180, 0,
+    {
+        "0" : "rgb(240, 204, 100)",
+        "0.8" : "rgb(200, 0, 0)",
+        "0.81" : "rgb(200, 30, 0)",
+        "0.9" : "rgb(200, 100, 0)",
+    },0
+  );
+
+var ks = new kSystem(canvasId);
+
+ks.addPlanet(sun);
+
+var marcury = new kPlanet("mercury", 0.4, 30, 4,
+    {
+        "0"    : "rgb(151, 153, 153)",
+        "0.3"  : "rgb(151, 153, 130)",
+        "0.9"  : "rgb(71, 73, 70)",
+        "0.91" : "rgb(81, 83, 80)",
+    },0.4
+  );
+
+sun.addChild(marcury);
+
+var venus = new kPlanet("venus", 0.8, 80, 6,
+    {
+        "0"    : "rgb(255, 204, 53)",
+        "0.3"  : "rgb(255, 204, 30)",
+        "0.9"  : "rgb(71, 73, 70)",
+        "0.91" : "rgb(81, 83, 80)",
+    },0.4
+  );
+
+sun.addChild(venus);
+
+var earth = new kPlanet("earth", 0.8, 100, 8,
+    {
+        "0" : "rgb(100, 204, 102)",
+        "0.6" : "rgb(51, 153, 204)",
+        "0.9" : "rgb(31, 100, 245)",
+        "0.91" : "rgb(70, 24, 100)",
+    },0.4
+  );
+
+sun.addChild(earth);
+
+var moon = new kPlanet("moon", 0.2, 10, 3,
+    {
+        "0.2"   : "rgb(151, 153, 130",
+        "0.4"   : "rgb(151, 153, 153)",
+        "0.6"   : "rgb(91, 93, 90)",
+        "0.91"  : "rgb(101, 103, 100)",
+    },0.4
+  );
+
+earth.addChild(moon);
+
+ks.draw();
+setInterval("ks.draw()", 600)
+
+// var zip = new JSZip();
+// var img = zip.folder("astorogyimages");
+// // img.file("smile.gif", imgData, {base64: true});
+// img.file("Hello.txt", "Hello World\n");
+// var content = zip.generate({type:"blob"});
+// // see FileSaver.js
+// saveAs(content, "example.zip");
+
+
+
 
 </script>
     </body>
