@@ -21,12 +21,13 @@
 "use strict";
 var canvasId = "astorogy";
 
-var sun = new kPlanet("sun", 3, 180, 0,
+var sun = new kPlanet("sun", 3, 0, 0,
     {
-        "0" : "rgb(240, 204, 100)",
-        "0.8" : "rgb(200, 0, 0)",
-        "0.81" : "rgb(200, 30, 0)",
-        "0.9" : "rgb(200, 100, 0)",
+        "0" : "rgb(240, 150, 80)",
+        "0.9" : "rgb(200, 100, 60)",
+        "0.99" : "rgb(200, 80, 40)",
+        "0.999" : "rgb(200, 70, 40)",
+        "0.9999" : "rgb(20, 10, 0)",
     },0
   );
 
@@ -34,7 +35,7 @@ var ks = new kSystem(canvasId);
 
 ks.addPlanet(sun);
 
-var marcury = new kPlanet("mercury", 0.4, 30, 4,
+var marcury = new kPlanet("mercury", 0.4, 90, 4,
     {
         "0"    : "rgb(151, 153, 153)",
         "0.3"  : "rgb(151, 153, 130)",
@@ -45,7 +46,7 @@ var marcury = new kPlanet("mercury", 0.4, 30, 4,
 
 sun.addChild(marcury);
 
-var venus = new kPlanet("venus", 0.8, 80, 6,
+var venus = new kPlanet("venus", 0.8, 540, 6,
     {
         "0"    : "rgb(255, 204, 53)",
         "0.3"  : "rgb(255, 204, 30)",
@@ -56,7 +57,7 @@ var venus = new kPlanet("venus", 0.8, 80, 6,
 
 sun.addChild(venus);
 
-var earth = new kPlanet("earth", 0.8, 100, 8,
+var earth = new kPlanet("earth", 0.8, 360, 8,
     {
         "0" : "rgb(100, 204, 102)",
         "0.6" : "rgb(51, 153, 204)",
@@ -67,7 +68,18 @@ var earth = new kPlanet("earth", 0.8, 100, 8,
 
 sun.addChild(earth);
 
-var moon = new kPlanet("moon", 0.2, 10, 3,
+var mars = new kPlanet("mars", 0.8, 676, 9,
+    {
+        "0" : "rgb(180, 154, 20)",
+        "0.911" : "rgb(160, 50, 20)",
+        "0.922" : "rgb(160, 100, 20)",
+        "0.99" : "rgb(50,  0, 0)",
+    },0.4
+  );
+
+sun.addChild(mars);
+
+var moon = new kPlanet("moon", 0.2, 29, 2,
     {
         "0.2"   : "rgb(151, 153, 130",
         "0.4"   : "rgb(151, 153, 153)",
@@ -79,7 +91,7 @@ var moon = new kPlanet("moon", 0.2, 10, 3,
 earth.addChild(moon);
 
 ks.draw();
-setInterval("ks.draw()", 600)
+setInterval("ks.draw()", 100)
 
 // var zip = new JSZip();
 // var img = zip.folder("astorogyimages");

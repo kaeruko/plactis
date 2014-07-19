@@ -9,7 +9,7 @@ kSystem.prototype.addPlanet = function(pObj) {
 
 kSystem.prototype.putMother = function() {
     //１秒の角度 * 進んだ数
-    var rad = Math.PI / this.kc.getPeriod(this.planet.period) * this.count;
+    var rad = 0;
 
     this.planet.point = this.kc.rotate(rad, this.planet.distance);
 // console.debug(this.planet.point);
@@ -33,7 +33,7 @@ kSystem.prototype.putAllSatellite = function(children) {
 
 kSystem.prototype.putSatellite = function(st) {
     //１回の角度 * 進んだ数
-    var theta = this.kc.degreeToRadian(st.period, this.count * -1);
+    var theta = this.kc.period2rad(st.period, this.count * -1);
     st.point = this.kc.rotate(theta, st.distance);
 console.debug(st.name, " count: ", this.count, " rad: ",theta, " deg:", this.kc.rad2deg(theta) );
 

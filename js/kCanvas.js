@@ -125,9 +125,14 @@ kCanvas.prototype.createGrad = function(colors, point, radius, theta , centerGap
     return grad;
 }
 
-kCanvas.prototype.degreeToRadian = function(period, degree) {
+kCanvas.prototype.period2rad = function(period, count) {
     //6.28をperiodで割っていくつ進めるか
-    return  2 * Math.PI / period * degree;
+    return Math.PI / period * count;
+}
+
+kCanvas.prototype.deg2rad = function(degree) {
+    //6.28をperiodで割っていくつ進めるか
+    return  Math.PI / 180 * degree;
 }
 
 kCanvas.prototype.rad2deg = function(rad) {
