@@ -1,6 +1,6 @@
-var kSystem = function(canvasId) {
+var kSystem = function(canvasId,scale) {
     this.count = 0;
-    this.kc = new kCanvas(canvasId);
+    this.kc = new kCanvas(canvasId,scale);
 }
 
 kSystem.prototype.addPlanet = function(pObj) {
@@ -13,7 +13,7 @@ kSystem.prototype.putMother = function() {
 
     this.planet.point = this.kc.rotate(rad, this.planet.distance);
 // console.debug(this.planet.point);
-    this.kc.circle(
+    this.kc.gradCircle(
         this.planet.point,
         this.planet.radius, this.planet.grad, rad,
         this.planet.centerGap
@@ -35,9 +35,9 @@ kSystem.prototype.putSatellite = function(st) {
     //１回の角度 * 進んだ数
     var theta = this.kc.period2rad(st.period, this.count * -1);
     st.point = this.kc.rotate(theta, st.distance);
-console.debug(st.name, " count: ", this.count, " rad: ",theta, " deg:", this.kc.rad2deg(theta) );
+// console.debug(st.name, " count: ", this.count, " rad: ",theta, " deg:", this.kc.rad2deg(theta) );
 
-    this.kc.circle(
+    this.kc.gradCircle(
         [
             st.point[0] + st.parent.point[0],
             st.point[1] + st.parent.point[1]

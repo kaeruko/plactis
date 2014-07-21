@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="ja" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <title>radianView</title>
+  </head>
+  <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
+  <script type="text/javascript" charset="utf-8" src="kAnime.js"></script>
+  <script type="text/javascript" charset="utf-8" src="kPlanet.js"></script>
+  <script type="text/javascript" charset="utf-8" src="jszip.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="FileSaver.js"></script>
+  <body>
+    <canvas id="radianView" width="500" height="500"></canvas>
+<script type="text/javascript">
+
+"use strict";
+var canvasId = "radianView";
+
+var ka = new kAnime(canvasId, 50);
+
+setInterval("ka.draw()", 400)
+
+// var zip = new JSZip();
+// var img = zip.folder("astorogyimages");
+// // img.file("smile.gif", imgData, {base64: true});
+// img.file("Hello.txt", "Hello World\n");
+// var content = zip.generate({type:"blob"});
+// // see FileSaver.js
+// saveAs(content, "example.zip");
+
+
+
+
+</script>
+    </body>
+</html>

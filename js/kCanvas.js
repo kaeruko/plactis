@@ -1,8 +1,8 @@
 var kCanvas = function(
-    canvasId
+    canvasId,scale
 ){
     //座標を何倍にするか
-    this.scale = 20;
+    this.scale = scale;
     var canvas = document.getElementById(canvasId);
     this.ctx = canvas.getContext("2d");
     this.canvasWidth = this.canvasHeight = canvas.width;
@@ -56,9 +56,9 @@ kCanvas.prototype.grid = function() {
         //x軸(x軸が動いているので)
         this.stroke([ - 1 * this.maxX, i], [ +1 * this.maxX, i], color);
         this.stroke([ i, - 1 * this.maxX], [ i, +1 * this.maxX], color);
-        this.strokeText(i, i, this.maxX / 2 - 1, "rgb(255, 255, 102)");
+        this.strokeText(i, i , this.maxX / 2 - 1 , "rgb(255, 255, 102)",  this.scale / 3);
         //縦軸の座標
-        this.strokeText(i, this.maxY / 2 - 1, i, "rgb(255, 255, 102)");
+        this.strokeText(i, this.maxY / 2 - 1, i, "rgb(255, 255, 102)",  this.scale / 3);
 
     };
 
@@ -67,27 +67,48 @@ kCanvas.prototype.grid = function() {
     this.stroke([ 0, -1 * this.maxX / 2 ],[ 0, +1 * this.maxX / 2 , 0 ], "rgb(153, 255, 255)" );
 }
 
-kCanvas.prototype.strokeText__ = function(text, x, y, color) {
+kCanvas.prototype.strokeText__ = function(text, x, y, color, size) {
     this.ctx.strokeStyle = color;
-    this.ctx.strokeText(text, x, y, 10);
+    this.ctx.font = size + "px 'ＭＳ Ｐゴシック'";
+    this.ctx.strokeText(text, x, y);
 }
 
-kCanvas.prototype.strokeText = function(text, x, y, color){
+kCanvas.prototype.strokeText = function(text, x, y, color, size){
     var ret = this.adjustPoint([x,y]);
-    this.strokeText__(text, ret[0], ret[1], color);
+    this.strokeText__(text, ret[0], ret[1], color, size);
 }
 
-kCanvas.prototype.circle = function(point, radius, colors, theta, centerGap) {
-    var grad = this.createGrad(colors, point, radius, theta, centerGap);
-    //座標を補正
+kCanvas.prototype.strokeCircle = function(point, radius, theta, color) {
     var point = this.adjustPoint(point);
-
-console.debug("point",radius);
-    this.ctx.fillStyle = grad;
+    this.ctx.strokeStyle = color;
     this.ctx.beginPath();
-    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , 2 * Math.PI , false );
+    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , theta , false );
+    this.ctx.stroke();
+    this.ctx.closePath();
+}
+
+kCanvas.prototype.fillCircle = function(point, radius, theta, color) {
+    var point = this.adjustPoint(point);
+    this.ctx.fillStyle = color;
+    this.ctx.beginPath();
+    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , theta , false );
     this.ctx.fill();
     this.ctx.closePath();
+}
+
+kCanvas.prototype.fillCircle = function(point, radius, theta, color) {
+    var point = this.adjustPoint(point);
+    this.ctx.fillStyle = color;
+    this.ctx.beginPath();
+    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , theta , false );
+    this.ctx.fill();
+    this.ctx.closePath();
+}
+
+kCanvas.prototype.gradCircle = function(point, radius, colors, theta, centerGap) {
+    var grad = this.createGrad(colors, point, radius, theta, centerGap);
+    //座標を補正
+    this.fillCircle(point, radius, Math.PI * 2, grad);
 }
 
 kCanvas.prototype.createGrad = function(colors, point, radius, theta , centerGap) {
@@ -127,7 +148,7 @@ kCanvas.prototype.createGrad = function(colors, point, radius, theta , centerGap
 
 kCanvas.prototype.period2rad = function(period, count) {
     //6.28をperiodで割っていくつ進めるか
-    return Math.PI / period * count;
+    return (Math.PI / period * count) % Math.PI * 2;
 }
 
 kCanvas.prototype.deg2rad = function(degree) {
@@ -146,9 +167,9 @@ kCanvas.prototype.getPeriod = function(period) {
 
 kCanvas.prototype.rotate = function(rad, distance) {
             //座標
-    var x = Math.cos(rad) * distance;
-    var y = Math.sin(rad) * distance;
-
+    var x = Math.cos(rad) * distance * +1;
+    var y = Math.sin(rad) * distance * +1;
+console.debug( "rad:" , rad, "cos: ", Math.cos(rad) , "sin:" , Math.sin(rad) );
     return [x,y];
 }
 
