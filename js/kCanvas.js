@@ -158,7 +158,7 @@ kCanvas.prototype.getPeriod = function(period) {
 kCanvas.prototype.rotate = function(rad, distance) {
             //座標
     var x = Math.cos(rad) * distance * 1;
-    var y = Math.sin(rad) * distance * -1;
+    var y = Math.sin(rad) * distance * 1;
 // console.debug( "rad:" , rad, "cos: ", Math.cos(rad) , "sin:" , Math.sin(rad) );
     return [x,y];
 }
