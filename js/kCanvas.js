@@ -30,8 +30,8 @@ kCanvas.prototype.stroke = function(start, end , color) {
 }
 
 kCanvas.prototype.adjustPoint = function(defaultpoint) {
-    var x = ( defaultpoint[0] * this.scale ) + (this.canvasWidth  / 2) ;
-    var y = ( defaultpoint[1] * this.scale ) - (this.canvasHeight / 2) * -1;
+    var x =   ( defaultpoint[0] * this.scale ) + (this.canvasWidth  / 2) ;
+    var y = - ( defaultpoint[1] * this.scale ) + (this.canvasHeight / 2) ;
     return [x,y];
 }
 
@@ -56,10 +56,9 @@ kCanvas.prototype.grid = function() {
         //x軸(x軸が動いているので)
         this.stroke([ - 1 * this.maxX, i], [ +1 * this.maxX, i], color);
         this.stroke([ i, - 1 * this.maxX], [ i, +1 * this.maxX], color);
-        this.strokeText(i, i , this.maxX / 2 - 1 , "rgb(255, 255, 102)",  this.scale / 3);
         //縦軸の座標
-        this.strokeText(i * -1, this.maxY / 2 - 1, i, "rgb(255, 255, 102)",  this.scale / 3);
-
+        this.strokeText(i, i , - this.maxX / 2 + 1 , "rgb(255, 255, 102)",  this.scale / 3);
+        this.strokeText(i, this.maxY / 2 - 1, i, "rgb(255, 255, 102)",  this.scale / 3);
     };
 
     //真ん中のx軸を引く
@@ -82,7 +81,7 @@ kCanvas.prototype.strokeCircle = function(point, radius, theta, color) {
     var point = this.adjustPoint(point);
     this.ctx.strokeStyle = color;
     this.ctx.beginPath();
-    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , theta , false );
+    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0, -theta , true );
     this.ctx.stroke();
     this.ctx.closePath();
 }
@@ -91,16 +90,7 @@ kCanvas.prototype.fillCircle = function(point, radius, theta, color) {
     var point = this.adjustPoint(point);
     this.ctx.fillStyle = color;
     this.ctx.beginPath();
-    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , theta , false );
-    this.ctx.fill();
-    this.ctx.closePath();
-}
-
-kCanvas.prototype.fillCircle = function(point, radius, theta, color) {
-    var point = this.adjustPoint(point);
-    this.ctx.fillStyle = color;
-    this.ctx.beginPath();
-    this.ctx.arc( point[0], point[1], this.adjustSize(radius), 0 , theta , false );
+    this.ctx.arc( point[0], point[1], this.adjustSize(radius),  0 , -theta , true );
     this.ctx.fill();
     this.ctx.closePath();
 }
@@ -167,8 +157,8 @@ kCanvas.prototype.getPeriod = function(period) {
 
 kCanvas.prototype.rotate = function(rad, distance) {
             //座標
-    var x = Math.cos(rad) * distance * +1;
-    var y = Math.sin(rad) * distance * +1;
+    var x = Math.cos(rad) * distance * 1;
+    var y = Math.sin(rad) * distance * -1;
 // console.debug( "rad:" , rad, "cos: ", Math.cos(rad) , "sin:" , Math.sin(rad) );
     return [x,y];
 }
