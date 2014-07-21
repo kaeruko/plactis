@@ -23,34 +23,40 @@ kSystem.prototype.putMother = function() {
 kSystem.prototype.putAllSatellite = function(children) {
     for (var i = 0; i < children.length; i++)  {
         //衛星表示
+// console.debug(children[i].theta);
         this.putSatellite(children[i]);
+// console.debug(children[i].theta);
         if(children[i].children.length > 0) {
             this.putAllSatellite(children[i].children);
         }
+
     };
 
 }
 
 kSystem.prototype.putSatellite = function(st) {
     //１回の角度 * 進んだ数
-    var theta = this.kc.period2rad(st.period, this.count * -1);
-    st.point = this.kc.rotate(theta, st.distance);
-// console.debug(st.name, " count: ", this.count, " rad: ",theta, " deg:", this.kc.rad2deg(theta) );
+    st.theta += this.kc.period2rad(st.period);
+    st.point = this.kc.rotate(st.theta, st.distance);
 
     this.kc.gradCircle(
         [
             st.point[0] + st.parent.point[0],
             st.point[1] + st.parent.point[1]
         ],
-        st.radius, st.grad, theta, st.centerGap
+        st.radius, st.grad, st.theta, st.centerGap
      );
 }
 
 kSystem.prototype.draw = function() {
+// if(this.count > 0){
+//     this.count --;
+//     return;
+// }
+// this.count = 1;
+
     this.kc.ctx.clearRect( 0, 0, this.kc.canvasWidth, this.kc.canvasHeight);
     this.kc.grid();
-
-    this.count ++;
 
     //母星表示
     this.putMother();

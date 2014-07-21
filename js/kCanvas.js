@@ -57,8 +57,8 @@ kCanvas.prototype.grid = function() {
         this.stroke([ - 1 * this.maxX, i], [ +1 * this.maxX, i], color);
         this.stroke([ i, - 1 * this.maxX], [ i, +1 * this.maxX], color);
         //縦軸の座標
-        this.strokeText(i, i , - this.maxX / 2 + 1 , "rgb(255, 255, 102)",  this.scale / 3);
-        this.strokeText(i, this.maxY / 2 - 1, i, "rgb(255, 0, 102)",  this.scale / 3);
+        this.strokeText(i, i , - this.maxX / 2 + 0.9 , "rgb(255, 255, 102)",  this.scale / 30);
+        this.strokeText(i, this.maxY / 2 - 0.9, i, "rgb(255, 0, 102)",  this.scale / 30);
     };
 
     //真ん中のx軸を引く
@@ -68,7 +68,7 @@ kCanvas.prototype.grid = function() {
 
 kCanvas.prototype.strokeText__ = function(text, x, y, color, size) {
     this.ctx.strokeStyle = color;
-    this.ctx.font = size + "px 'ＭＳ Ｐゴシック'";
+    this.ctx.font = size + "px 'ヒラギノ角ゴ'";
     this.ctx.strokeText(text, x, y);
 }
 
@@ -137,13 +137,14 @@ kCanvas.prototype.createGrad = function(colors, point, radius, theta , centerGap
 }
 
 kCanvas.prototype.period2rad = function(period, count) {
-    //6.28をperiodで割っていくつ進めるか
-    return (Math.PI / period * count) % Math.PI * 2;
+    return ( Math.PI / period ) ;
+   // return (Math.PI / period * count) % Math.PI * 2;
+
 }
 
 kCanvas.prototype.deg2rad = function(degree) {
     //6.28をperiodで割っていくつ進めるか
-    return  Math.PI / 180 * degree  % Math.PI * 2;
+    return  ( Math.PI / 180 * degree )  % (Math.PI *2);
 }
 
 kCanvas.prototype.rad2deg = function(rad) {
