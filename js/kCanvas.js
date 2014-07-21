@@ -58,7 +58,7 @@ kCanvas.prototype.grid = function() {
         this.stroke([ i, - 1 * this.maxX], [ i, +1 * this.maxX], color);
         //縦軸の座標
         this.strokeText(i, i , - this.maxX / 2 + 1 , "rgb(255, 255, 102)",  this.scale / 3);
-        this.strokeText(i, this.maxY / 2 - 1, i, "rgb(255, 255, 102)",  this.scale / 3);
+        this.strokeText(i, this.maxY / 2 - 1, i, "rgb(255, 0, 102)",  this.scale / 3);
     };
 
     //真ん中のx軸を引く
@@ -163,6 +163,9 @@ kCanvas.prototype.rotate = function(rad, distance) {
     return [x,y];
 }
 
+kCanvas.prototype.r = function(num, digit) {
+    return Math.round(num * digit) / digit;
+}
 
 /*
 Base64toBlob
