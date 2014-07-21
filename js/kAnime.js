@@ -56,9 +56,9 @@ kAnime.prototype.trigonometoric = function(){
     this.kc.grid();
 
     for (var i = 0; i < 360; i+=15) {
-    var the = this.kc.deg2rad(i);
-    var p = this.kc.rotate(the, radius+ 0.2);
-    this.kc.strokeText(i, p[0], p[1],  "rgb(255, 255, 202)", 20);
+        var the = this.kc.deg2rad(i);
+        var p = this.kc.rotate(the, radius+ 0.2);
+        this.kc.strokeText(i, p[0], p[1],  "rgb(255, 255, 202)", 20);
     };
 
     if(deg % 15 == 0){
@@ -76,7 +76,35 @@ kAnime.prototype.trigonometoric = function(){
     this.kc.strokeText(sintext, point[0], point[1] / 2, "rgb(240, 150, 80)", 20);
     this.kc.strokeText(1, point[0] / 2, point[1] / 2, "rgb(0, 253, 153)", 2);
     if(cons[deg] && sins[deg]){
-        this.count += 10;
+        this.count += 5;
     }
+}
+
+kAnime.prototype.unitcircle = function(){
+    if(this.count > 2){
+        this.count = 0 ;
+    }
+    this.count++;
+    this.kc.ctx.clearRect( 0, 0, this.kc.canvasWidth, this.kc.canvasHeight);
+    this.kc.grid();
+
+    this.kc.strokeCircle([0,0], this.count, Math.PI * 2, "red", true);
+
+    var point = this.kc.rotate(this.kc.deg2rad(30), this.count);
+    this.kc.stroke([0,0],point, "rgb(0, 253, 153)");
+    this.kc.stroke([0,0],[point[0], 0], "rgb(255, 0, 102)");
+    var costext = this.kc.r( point[0] , 100);
+    var sintext = this.kc.r( point[1] , 100);
+    var vectext = this.count;
+if(this.count > 1){
+    costext = "×" + this.count + "  "+ costext;
+    sintext = "×" + this.count + "  "+ sintext;
+    vectext = "×" + this.count + "  "+ vectext;
+}
+    this.kc.strokeText(costext, 0.3, -0.2, "rgb(255, 0, 102)", 3);
+    this.kc.stroke(point,[point[0], 0], "rgb(240, 150, 80)");
+    this.kc.strokeText(sintext, point[0], point[1] / 2, "rgb(240, 150, 80)", 3);
+    this.kc.strokeText(vectext, point[0] / 2, point[1] / 2, "rgb(0, 253, 153)", 3);
+
 
 }
