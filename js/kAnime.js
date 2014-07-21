@@ -12,11 +12,11 @@ kAnime.prototype.draw = function(){
 
 kAnime.prototype.locus = function(){
     var radius = 3;
-    var theta = this.kc.period2rad(100,this.count);
+    var theta = this.kc.period2rad(360,this.count);
     var point = this.kc.rotate(theta, radius);
     // this.kc.stroke([0,0],[point[0], point[1]], null);
     this.kc.strokeCircle([0,0], radius, theta, "red", true);
-    this.kc.strokeText("Radian:"+theta, -4, 3, "rgb(255, 255, 202)", 30);
-    this.kc.strokeText("Dagree:"+this.kc.rad2deg(theta), -4, 4, "rgb(255, 255, 202)", 30);
+    this.kc.strokeText("Radian:"+theta, -4, 0, "rgb(255, 255, 202)", 30);
+    this.kc.strokeText("Dagree:"+this.kc.rad2deg(theta), -4, 1, "rgb(255, 255, 202)", 30);
 
 }

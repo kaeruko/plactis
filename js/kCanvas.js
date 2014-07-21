@@ -153,11 +153,11 @@ kCanvas.prototype.period2rad = function(period, count) {
 
 kCanvas.prototype.deg2rad = function(degree) {
     //6.28をperiodで割っていくつ進めるか
-    return  Math.PI / 180 * degree;
+    return  Math.PI / 180 * degree  % Math.PI * 2;
 }
 
 kCanvas.prototype.rad2deg = function(rad) {
-    return rad *  180 / Math.PI ;
+    return rad *  180 / Math.PI % 360;
 // return rad * 57;
 }
 
@@ -169,7 +169,7 @@ kCanvas.prototype.rotate = function(rad, distance) {
             //座標
     var x = Math.cos(rad) * distance * +1;
     var y = Math.sin(rad) * distance * +1;
-console.debug( "rad:" , rad, "cos: ", Math.cos(rad) , "sin:" , Math.sin(rad) );
+// console.debug( "rad:" , rad, "cos: ", Math.cos(rad) , "sin:" , Math.sin(rad) );
     return [x,y];
 }
 
