@@ -96,15 +96,43 @@ kAnime.prototype.unitcircle = function(){
     var costext = this.kc.r( point[0] , 100);
     var sintext = this.kc.r( point[1] , 100);
     var vectext = this.count;
-if(this.count > 1){
-    costext = "×" + this.count + "  "+ costext;
-    sintext = "×" + this.count + "  "+ sintext;
-    vectext = "×" + this.count + "  "+ vectext;
-}
-    this.kc.strokeText(costext, 0.3, -0.2, "rgb(255, 0, 102)", 3);
+    if(this.count > 1){
+        costext = "×" + this.count + "  "+ costext;
+        sintext = "×" + this.count + "  "+ sintext;
+        vectext = "×" + this.count + "  "+ vectext;
+    }
+    this.kc.strokeText(costext, 0.3, -0.2, "rgb(255, 0, 102)", 15);
     this.kc.stroke(point,[point[0], 0], "rgb(240, 150, 80)");
-    this.kc.strokeText(sintext, point[0], point[1] / 2, "rgb(240, 150, 80)", 3);
-    this.kc.strokeText(vectext, point[0] / 2, point[1] / 2, "rgb(0, 253, 153)", 3);
+    this.kc.strokeText(sintext, point[0], point[1] / 2, "rgb(240, 150, 80)", 15);
+    this.kc.strokeText(vectext, point[0] / 2, point[1] / 2, "rgb(0, 253, 153)", 15);
 
+    var explain = [
+        "緑の線(ベクトル)が1の円(単位円)。角度を渡せば単位円のXY座標が出せます。",
+        "半径を2にしたい場合。XとYに2をかければベクトルも2倍です。",
+        "半径を3にしたい場合。XとYに3をかければベクトルも3倍です。",
+        "半径を4にしたい場合。XとYに4をかければベクトルも4倍です。"
+    ]
+    this.kc.strokeText(explain[this.count % 4 - 1], -3, -1, "rgb(0, 253, 153)", 15);
+}
+
+kAnime.prototype.turnover = function(){
+    if(this.count > 2){
+        this.count = 0 ;
+    }
+    this.count++;
+    this.kc.ctx.clearRect( 0, 0, this.kc.canvasWidth, this.kc.canvasHeight);
+    this.kc.grid();
+
+    this.kc.fillCircle([3,3], 0.1, Math.PI * 2, "rgb(0, 253, 153)", true);
+    this.kc.strokeText("x=3,y=3", 2.7, 2.7, "rgb(0, 253, 153)", 15);
+
+    this.kc.fillCircle([-3,-3], 0.1, Math.PI * 2, "rgb(0, 253, 153)", true);
+    this.kc.strokeText("x=ー3,y=ー3", -3.3, -3.3, "rgb(0, 253, 153)", 15);
+
+    this.kc.fillCircle([-3,3], 0.1, Math.PI * 2, "rgb(0, 253, 153)", true);
+    this.kc.strokeText("x=ー3,y=3", -3.3, 2.7, "rgb(0, 253, 153)", 15);
+
+    this.kc.fillCircle([3,-3], 0.1, Math.PI * 2, "rgb(0, 253, 153)", true);
+    this.kc.strokeText("x=ー3,y=3", 2.7, -3.3, "rgb(0, 253, 153)", 15);
 
 }
