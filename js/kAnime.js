@@ -36,7 +36,7 @@ kAnime.prototype.trigonometoric = function(){
     this.count = 3;
 
     var radius = 1;
-    this.theta = (this.theta + this.kc.period2rad(15)) % (Math.PI * 2);
+    this.theta = (this.theta + this.kc.period2rad(180)) % (Math.PI * 2);
     var point = this.kc.rotate(this.theta, radius);
     var deg = this.kc.r(this.kc.rad2deg(this.theta),100);
     var costext = "cos:"+this.kc.r(Math.cos(this.theta),1000);
