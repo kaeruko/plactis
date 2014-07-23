@@ -1,5 +1,4 @@
 var kPlanet = function(name, radius, period, distance, grad, centerGap) {
-this.aa = 0;
     this.children = [];
     this.create(name, radius, period, distance, grad, centerGap);
     this.theta = 0;

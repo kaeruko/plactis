@@ -35,6 +35,12 @@ kCanvas.prototype.adjustPoint = function(defaultpoint) {
     return [x,y];
 }
 
+kCanvas.prototype.scaledown = function(defaultpoint) {
+    var x =  ( defaultpoint[0] - ( this.canvasWidth  / 2 )) / this.scale;
+    var y =  ( defaultpoint[1] - ( this.canvasHeight / 2 )) / this.scale;
+    return [x,-y];
+}
+
 kCanvas.prototype.adjustSize = function(size){
     return size * this.scale;
 }
@@ -137,7 +143,7 @@ kCanvas.prototype.createGrad = function(colors, point, radius, theta , centerGap
 }
 
 kCanvas.prototype.period2rad = function(period, count) {
-    return ( Math.PI / period ) ;
+    return ( Math.PI / period ) % (Math.PI * 2);
    // return (Math.PI / period * count) % Math.PI * 2;
 
 }

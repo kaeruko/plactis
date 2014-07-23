@@ -28,6 +28,7 @@ kAnime.prototype.locus = function(){
 }
 
 kAnime.prototype.trigonometoric = function(){
+
     if(this.count > 0){
         this.count --;
         return;
@@ -35,7 +36,7 @@ kAnime.prototype.trigonometoric = function(){
     this.count = 3;
 
     var radius = 1;
-    this.theta += this.kc.period2rad(96);
+    this.theta = (this.theta + this.kc.period2rad(15)) % (Math.PI * 2);
     var point = this.kc.rotate(this.theta, radius);
     var deg = this.kc.r(this.kc.rad2deg(this.theta),100);
     var costext = "cos:"+this.kc.r(Math.cos(this.theta),1000);
@@ -78,6 +79,12 @@ kAnime.prototype.trigonometoric = function(){
     if(cons[deg] && sins[deg]){
         this.count += 5;
     }
+}
+
+kAnime.prototype.arctan = function(e){
+    var scaledownpoint = this.kc.scaledown([e.offsetX,e.offsetY]);
+    this.theta = Math.atan2(scaledownpoint[1],scaledownpoint[0]);
+    this.kc.fillCircle(scaledownpoint, 0.05, Math.PI * 2, "red", true);
 }
 
 kAnime.prototype.unitcircle = function(){
