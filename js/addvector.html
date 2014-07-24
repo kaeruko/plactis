@@ -12,7 +12,8 @@
   <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
   <script type="text/javascript" charset="utf-8" src="kVector.js"></script>
   <body>
-    <canvas id="addVector" width="800" height="800"></canvas>
+ドラッグしてね！
+    <canvas id="addVector" width="600" height="600"></canvas>
 <script type="text/javascript">
 
 "use strict";
@@ -25,6 +26,8 @@ kv.kc.canvas.addEventListener("mousedown",function(e){
   }, false);
 kv.kc.canvas.addEventListener("mouseup",function(e){
    kv.setEndPoint(e);
+   kv.setVector();
+   kv.showAddVector();
   }, false);
 // var t = setInterval("ka.trigonometoric()", 100);
 </script>
