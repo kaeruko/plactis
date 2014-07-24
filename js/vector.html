@@ -1,0 +1,56 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="ja" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <title>bekutoru</title>
+  </head>
+  <body>
+    <canvas id="vector" width="300" height="300"></canvas>
+<script type="text/javascript">
+//canvasを作る
+var canvas = document.getElementById("vector");
+var ctx = canvas.getContext("2d");
+
+var O = {x:60, y:150};
+var A = {x:70, y:50};
+var B = {x:210, y:150};
+
+var shareM = -5;
+var shareN = 0;
+var px = ((shareM * B.x) + (shareN * A.x)) / (shareM + shareN);
+var py = ((shareM * B.y) + (shareN * A.y)) / (shareM + shareN);
+
+var NAI = {x: px , y: py };
+ctx.fillStyle = "rgb(60, 100, 60)";
+ctx.fillRect( 0, 0, 300, 300 );
+
+ctx.beginPath();
+
+myStroke( O, A, "#FF99CC"  );
+myStroke( A, B, "#FF99CC"  );
+myStroke( B, O, "#FF99CC"  );
+myStroke( O, NAI, "#FF0000"  );
+
+
+
+function myStroke(start, end, color){
+  ctx.beginPath();
+  //O点を起点に
+  ctx.moveTo(start.x,start.y);
+  ctx.lineTo(end.x,end.y);
+  ctx.closePath();
+  ctx.strokeStyle = color;
+  ctx.stroke();
+}
+
+</script>
+
+</body>
+</html>
+
