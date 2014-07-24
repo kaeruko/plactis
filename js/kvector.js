@@ -57,22 +57,8 @@ kVector.prototype.setEndPoint = function(e){
         var added = this.addVector(this.vec1len, this.vec2len);
         var addedPoint = this.addVectorPoint( added, this.vector1, this.vector2);
 console.debug(added, addedPoint);
-    this.showlenText(added, addedPoint[1]);
-    this.kc.stroke(addedPoint[0], addedPoint[1]);
-
-// var soutaix = aidavector[1][0] - aidavector[0][0];
-// var soutaiy = aidavector[1][1] - aidavector[0][1];
-
-// var added = [(aidavector[0][0]/ 2) + soutaix ,aidavector[0][1] / 2 + soutaiy];
-//     this.showlenText(added, added);
-
-// var added = [[ aidavector[0][0]/ 2, aidavector[0][1] / 2],[(aidavector[0][0]/ 2) + soutaix ,aidavector[0][1] / 2 + soutaiy]];
-
-//         this.kc.stroke(
-// added[0],added[1],
-//             "#CCCCCC");
-//     this.kc.fillCircle( added, 0.1,  Math.PI * 2, "#FFFFFF" );
-
+        this.showlenText(added, addedPoint[1]);
+        this.kc.stroke(addedPoint[0], addedPoint[1]);
 
         this.startPoint = 0;
         this.endPoint = 0;
