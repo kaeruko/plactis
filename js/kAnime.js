@@ -71,7 +71,7 @@ kAnime.prototype.trigonometoric = function(){
     this.kc.stroke(point,[point[0], 0], "rgb(240, 150, 80)");
     this.kc.strokeCircle([0,0], 1, Math.PI * 2, "red", true);
     this.kc.strokeCircle([0,0], 0.2, this.theta, "red", true);
-    this.kc.strokeText("Radian:"+this.kc.r(this.theta, 100), 1, -1.5, "rgb(255, 255, 202)", 20);
+    this.kc.strokeText("Radian:"+this.kc.r(this.theta, 100), -1.5, 1.5, "rgb(255, 255, 202)", 20);
     this.kc.strokeText(deg +"°", -0.14, 0.3, "rgb(255, 255, 202)", 20);
     this.kc.strokeText(costext,  point[0] / 2 * 1.1 - 0.2 ,0,  "rgb(255, 0, 102)", 20);
     this.kc.strokeText(sintext, point[0], point[1] / 2, "rgb(240, 150, 80)", 20);
@@ -83,9 +83,11 @@ kAnime.prototype.trigonometoric = function(){
 
 kAnime.prototype.arctan = function(e){
     var scaledownpoint = this.kc.scaledown([e.offsetX,e.offsetY]);
+
     this.theta = Math.atan2(scaledownpoint[1],scaledownpoint[0]);
     this.kc.fillCircle(scaledownpoint, 0.05, Math.PI * 2, "red", true);
 }
+
 
 kAnime.prototype.unitcircle = function(){
     if(this.count > 2){

@@ -7,25 +7,26 @@
     <meta http-equiv="Content-Language" content="ja" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
-    <title>arctan</title>
+    <title>addVector</title>
   </head>
   <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
-  <script type="text/javascript" charset="utf-8" src="kAnime.js"></script>
-  <script type="text/javascript" charset="utf-8" src="kPlanet.js"></script>
-  <script type="text/javascript" charset="utf-8" src="jszip.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="FileSaver.js"></script>
+  <script type="text/javascript" charset="utf-8" src="kVector.js"></script>
   <body>
-    <canvas id="arctan" width="600" height="600"></canvas>
+    <canvas id="addVector" width="800" height="800"></canvas>
 <script type="text/javascript">
 
 "use strict";
-var canvasId = "arctan";
+var canvasId = "addVector";
 
-var ka = new kAnime(canvasId, 150);
-ka.kc.canvas.addEventListener("mousedown",function(e){ka.arctan(e);}, false);
-ka.trigonometoric();
-var t = setInterval("ka.trigonometoric()", 100);
-
+var kv = new kVector(canvasId, 100);
+kv.init();
+kv.kc.canvas.addEventListener("mousedown",function(e){
+   kv.setStartPoint(e);
+  }, false);
+kv.kc.canvas.addEventListener("mouseup",function(e){
+   kv.setEndPoint(e);
+  }, false);
+// var t = setInterval("ka.trigonometoric()", 100);
 </script>
     </body>
 </html>

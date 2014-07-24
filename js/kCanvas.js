@@ -72,6 +72,21 @@ kCanvas.prototype.grid = function() {
     this.stroke([ 0, -1 * this.maxX / 2 ],[ 0, +1 * this.maxX / 2 , 0 ], "rgb(153, 255, 255)" );
 }
 
+kCanvas.prototype.vectorGrid = function() {
+    //透明に
+    this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeight);
+    this.ctx.fillStyle = "rgb(0, 0, 80)";
+    //塗りつぶし
+    this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeight);
+
+    for (var i = -1 * this.maxX / 2; i < +1 * this.maxX / 2; i++) {
+        var color =   "rgb(80, 80, 80)" ;
+        //x軸(x軸が動いているので)
+        this.stroke([ - 1 * this.maxX, i], [ +1 * this.maxX, i], color);
+        this.stroke([ i, - 1 * this.maxX], [ i, +1 * this.maxX], color);
+    };
+}
+
 kCanvas.prototype.strokeText__ = function(text, x, y, color, size) {
     this.ctx.strokeStyle = color;
     this.ctx.font = size + "px 'ヒラギノ角ゴ'";
@@ -173,6 +188,53 @@ kCanvas.prototype.rotate = function(rad, distance) {
 kCanvas.prototype.r = function(num, digit) {
     return Math.round(num * digit) / digit;
 }
+
+kCanvas.prototype.arrow = function(start, end, color){
+//長さを出す
+var x_diff = end[0] - start[0];
+var y_diff = end[1] - start[1];
+
+var fat_flg = x_diff > y_diff;
+
+var p = [(x_diff * 0.8) + start[0], (y_diff * 0.8) + start[1] ];
+
+this.stroke( start, p, "#333300" );
+
+//直角の傾きを出す
+var slope = fat_flg ? -x_diff / y_diff : -y_diff / x_diff;
+
+if(!isFinite(slope)){
+  slope = 0;
+}
+
+if(!fat_flg){
+  var x =   1 *  slope ;
+  var y =   1  ;
+}else{
+  var x =   1  ;
+  var y =   1  * slope  ;
+}
+
+var ratio =  1 / Math.sqrt( (x * x) + (y * y)  )  ;
+
+if(fat_flg){
+  var tmp_right = [ p[0] +  -1 *  slope  * ratio ,  p[1] - 1  * ratio ]
+  var tmp_left  = [ p[0] + 1 *  slope  * ratio ,  p[1] + 1  * ratio ]
+}else{
+  var tmp_right = [ p[0] + 1 * ratio , p[1] + 1 * slope * ratio ]
+  var tmp_left  = [ p[0] - 1 * ratio , p[1] - 1 * slope * ratio ]
+}
+
+this.stroke( p, tmp_right, "#CCFFFF" );
+
+this.stroke( p, tmp_left, "#FF0000" );
+
+this.stroke( end, tmp_right, "#ffffff" );
+this.stroke( end, tmp_left, "#F971DB" );
+}
+
+
+
 
 /*
 Base64toBlob
