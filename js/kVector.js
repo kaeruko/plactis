@@ -56,7 +56,7 @@ kVector.prototype.setEndPoint = function(e){
 
         var added = this.addVector(this.vec1len, this.vec2len);
         var addedPoint = this.addVectorPoint( added, this.vector1, this.vector2);
-console.debug(added, addedPoint);
+// console.debug(added, addedPoint);
         this.showlenText(added, addedPoint[1]);
         this.kc.stroke(addedPoint[0], addedPoint[1]);
 
