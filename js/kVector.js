@@ -110,20 +110,20 @@ kVector.prototype.subVectorPoint = function(sub, vec1, vec2){
     var start = vec1[1];
 
     var end = [  f(start[0]) + f(sub[0]) , f(start[1]) + f(sub[1]) ];
-console.debug( "point: x= " , end[0], " y=", end[1]);
+// console.debug( "point: x= " , end[0], " y=", end[1]);
 
     return [start, end];
 }
 
 kVector.prototype.subVector = function(vec1len, vec2len){
-console.debug("vec1length width:", vec1len[0], "height:", vec1len[1]  );
-console.debug("vec2length width:", vec2len[0], "height:", vec2len[1]  );
+// console.debug("vec1length width:", vec1len[0], "height:", vec1len[1]  );
+// console.debug("vec2length width:", vec2len[0], "height:", vec2len[1]  );
 
     //width, hight
    var sub = [
         vec2len[0] - vec1len[0], vec2len[1] - vec1len[1]
     ];
-console.debug("sub: x= ", sub[0], " y=", sub[1]  );
+// console.debug("sub: x= ", sub[0], " y=", sub[1]  );
 
     return sub;
 }
