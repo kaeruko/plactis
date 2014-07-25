@@ -7,19 +7,19 @@
     <meta http-equiv="Content-Language" content="ja" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
-    <title>addVector</title>
+    <title>subVector</title>
   </head>
   <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
   <script type="text/javascript" charset="utf-8" src="kVector.js"></script>
   <body>
 ドラッグして引っ張ると、ベクトルが出来るよ！<br />
-ベクトルを二つ作ると、足したベクトルが出来るよ！
+ベクトルを二つ作ると、引いたベクトルが出来るよ！
 <br />
-    <canvas id="addVector" width="600" height="600"></canvas>
+    <canvas id="subVector" width="600" height="600"></canvas>
 <script type="text/javascript">
 
 "use strict";
-var canvasId = "addVector";
+var canvasId = "subVector";
 
 var kv = new kVector(canvasId, 100);
 kv.init();
@@ -29,7 +29,7 @@ kv.kc.canvas.addEventListener("mousedown",function(e){
 kv.kc.canvas.addEventListener("mouseup",function(e){
    kv.setEndPoint(e);
    kv.setVector();
-   if(kv.showAddVector()){
+   if(kv.showSubVector()){
 //     var kv = new kVector(canvasId, 100);
    }
   }, false);

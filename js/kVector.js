@@ -14,24 +14,14 @@ kVector.prototype.init = function(){
     this.kc.vectorGrid();
 }
 
-
-kVector.prototype.setStartPoint = function(e){
-    var scaledownpoint = this.kc.scaledown([e.offsetX,e.offsetY]);
-    this.startPoint = scaledownpoint;
-}
-
 /**
  * 2つの座標から長さを出す
  */
 kVector.prototype.relativeLen = function(start, end){
     var ret = [
-        // Math.abs(end[0] - start[0]),
-        // Math.abs(end[1] - start[1])
         end[0] - start[0],
         end[1] - start[1]
     ]
-console.debug( "end.x: ", end[0], " st:.x:", start[0] , end[0] - start[0] );
-console.debug( "relativeLen:", ret  );
     return ret;
 }
 
@@ -39,51 +29,69 @@ console.debug( "relativeLen:", ret  );
  * 2つの座標の長さをテキストで表示
  */
 kVector.prototype.showlenText = function(len,point){
-    var text = "wid:" + Math.abs(this.kc.r(len[0],100)) +" , hgt:" + Math.abs(this.kc.r(len[1],100));
+    var text = "wid:" + (this.kc.r(len[0],100)) +" , hgt:" + (this.kc.r(len[1],100));
+//    var text = "wid:" + Math.abs(this.kc.r(len[0],100)) +" , hgt:" + Math.abs(this.kc.r(len[1],100));
     this.kc.strokeText(text, point[0] + 0.2 , point[1] + 0.2, "rgb(255, 255, 102)", 15);
 }
 
-kVector.prototype.setEndPoint = function(e){
-    var scaledownpoint = this.kc.scaledown([e.offsetX,e.offsetY]);
-    this.kc.fillCircle(scaledownpoint, 0.05, Math.PI * 2, "red", true);
-    this.endPoint = scaledownpoint;
-    this.kc.stroke(this.startPoint, this.endPoint);
-
-    //相対ベクトルを表示
-    var veclen = this.relativeLen(this.startPoint, this.endPoint ) ;
-    this.showlenText(veclen, this.endPoint);
-
-    //ベクトル1が設定済みの場合は、足した後のベクトルを表示する
-    if(this.vector1.length > 0){
-        this.vec2len = veclen;
-        this.vector2 = [this.startPoint, this.endPoint];
-
-        var added = this.addVector(this.vec1len, this.vec2len);
-        var addedPoint = this.addVectorPoint( added, this.vector1, this.vector2);
-// console.debug(" added: ", added, " addedPoint:", addedPoint[0], " ~ ", addedPoint[1]);
-        this.showlenText(added, addedPoint[1]);
-        this.kc.stroke(addedPoint[0], addedPoint[1]);
-        this.kc.fillCircle(addedPoint[1], 0.05, Math.PI * 2, "red", true);
-
-        this.startPoint = 0;
-        this.endPoint = 0;
-        this.vector1 = [];
-        this.vector2 = [];
-    }
-    else{
-        this.vector1 = [this.startPoint, this.endPoint];
-        this.vec1len = veclen;
-    }
+kVector.prototype.setStartPoint = function(e){
+    this.startPoint = this.kc.scaledown([e.offsetX,e.offsetY]);
 }
 
-function f(f){
-    return parseFloat(f);
+kVector.prototype.setEndPoint = function(e){
+    this.endPoint = this.kc.scaledown([e.offsetX,e.offsetY]);
+    //endpointに丸をひく
+    this.kc.fillCircle(this.endPoint, 0.05, Math.PI * 2, "red", true);
+}
+
+/**
+ * this.vectorに格納
+ */
+kVector.prototype.setVector = function(){
+    //vec1がセットされてたらvec2にセット
+    var veclen = this.relativeLen(this.startPoint, this.endPoint ) ;
+    if(this.vector1.length > 0){
+        this.vector2 = [ this.startPoint, this.endPoint ];
+        this.vec2len = veclen;
+    }else{
+        this.vector1 = [ this.startPoint, this.endPoint ];
+        this.vec1len = veclen;
+    }
+    this.kc.stroke(this.startPoint, this.endPoint);
+    //相対ベクトルを表示
+    this.showlenText(veclen, this.endPoint);
+}
+
+kVector.prototype.showAddVector = function(e){
+    if(this.vector1.length == 0 || this.vector2.length == 0){
+        return false;
+    }
+
+    var added = this.addVector(this.vec1len, this.vec2len);
+    var addedPoint = this.addVectorPoint( added, this.vector1, this.vector2);
+    this.showlenText(added, addedPoint[1]);
+    this.kc.stroke(addedPoint[0], addedPoint[1]);
+    this.kc.fillCircle(addedPoint[1], 0.05, Math.PI * 2, "red", true);
+    this.destruct();
+}
+
+kVector.prototype.showSubVector = function(e){
+    if(this.vector1.length == 0 || this.vector2.length == 0){
+        return false;
+    }
+
+    var subed = this.subVector(this.vec1len, this.vec2len);
+    var subedPoint = this.subVectorPoint( subed, this.vector1, this.vector2);
+    this.showlenText(subed, subedPoint[1]);
+    this.kc.stroke(subedPoint[0], subedPoint[1], "rgb(255, 255, 0)");
+    this.kc.fillCircle(subedPoint[1], 0.05, Math.PI * 2, "rgb(255, 255, 0)", true);
+    this.destruct();
 }
 
 kVector.prototype.addVectorPoint = function(add, vec1, vec2){
     var start = [  ( f(vec1[0][0]) + f(vec2[0][0]) )  / 2 ,
                    ( f(vec1[0][1]) + f(vec2[0][1]) )  / 2 ];
-     var end = [  start[0] + add[0] , start[1] + add[1] ];
+    var end = [  start[0] + add[0] , start[1] + add[1] ];
 
     return [start, end];
 }
@@ -92,42 +100,43 @@ kVector.prototype.addVector = function(vec1len, vec2len){
     //width, hight
    var add = [
         // Math.abs(vec1len[0] + vec2len[0]), Math.abs(vec1len[1] + vec2len[1])
-        vec1len[0] + vec2len[0], vec1len[1] + vec2len[1]
+        vec2len[0] - vec1len[0], vec2len[1] - vec1len[1]
     ];
     return add;
 }
 
-kVector.prototype.matrixarrow = function(start, end, color){
-    //長さを出す
-    var diff_x =  end[0] - start[0];
-    var diff_y =  end[1] - start[1];
+kVector.prototype.subVectorPoint = function(sub, vec1, vec2){
 
-    //傾きを出す
-    var slope = diff_y / diff_x;
+    var start = vec1[1];
 
-    console.debug("end", end);
-    console.debug("start", start);
-    console.debug("slope", slope );
+    var end = [  f(start[0]) + f(sub[0]) , f(start[1]) + f(sub[1]) ];
+console.debug( "point: x= " , end[0], " y=", end[1]);
 
-    //点Pをひく
-    //ベクトルの何割にp点をひくか
-    var pdiv = 0.8;
-    //p点の座標
-    var ppos = [diff_x * pdiv + start[0], diff_y * pdiv + start[1] ];
-    //垂直線
-    var vertical = [ end[0]  , end[0] *  (1 / slope) * -1 ];
-    rightwing  = this.addVector(vertical, ppos);
-    console.debug("vertical", vertical );
-
-    leftwing  = this.addVector([vertical[0] * -1, vertical[1] * -1], ppos);
-
-    // this.kc.stroke( ppos, vertical , "#FF3366" );
-    this.kc.stroke( ppos, leftwing , "#FF3366" );
-    // this.kc.stroke( end, ppos , "#FF3366" );
-    this.kc.stroke( ppos, rightwing , "#FF3366" );
-    //垂直線を引く
-    this.kc.fillCircle( ppos , 0.1,  Math.PI , "#FFFFFF" );
-
-
+    return [start, end];
 }
 
+kVector.prototype.subVector = function(vec1len, vec2len){
+console.debug("vec1length width:", vec1len[0], "height:", vec1len[1]  );
+console.debug("vec2length width:", vec2len[0], "height:", vec2len[1]  );
+
+    //width, hight
+   var sub = [
+        vec2len[0] - vec1len[0], vec2len[1] - vec1len[1]
+    ];
+console.debug("sub: x= ", sub[0], " y=", sub[1]  );
+
+    return sub;
+}
+
+kVector.prototype.destruct = function(){
+    this.vec1len = 0;
+    this.vec2len = 0;
+    this.startPoint = 0;
+    this.endPoint = 0;
+    this.vector1 = [];
+    this.vector2 = [];
+}
+
+function f(f){
+    return parseFloat(f);
+}
