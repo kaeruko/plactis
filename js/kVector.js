@@ -76,7 +76,7 @@ kVector.prototype.showInfoVector = function(e){
     }
     //単位ベクトルを出す
     var length = this.getVector( this.vec1len );
-    var unit = this.unitVector(length, this.vector1[1]);
+    var unit = this.unitVector(length, this.vec1len);
 console.debug( "this.vec1.st:", this.vector1[0] );
 console.debug( "this.vec1len:", this.vec1len );
     this.showlenText(unit, [this.vector1[1][0], this.vector1[1][1] - 0.5], "rgb(255, 104, 104)");
