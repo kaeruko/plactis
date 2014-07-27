@@ -15,6 +15,14 @@ kVector.prototype.init = function(){
 }
 
 /**
+ * 斜辺の長さ出す
+ */
+kVector.prototype.getVector = function(len){
+    var ret = Math.sqrt( ( len[0] * len[0] ) + ( len[1] * len[1] ) );
+    return ret;
+}
+
+/**
  * 2つの座標から長さを出す
  */
 kVector.prototype.relativeLen = function(start, end){
@@ -28,10 +36,10 @@ kVector.prototype.relativeLen = function(start, end){
 /**
  * 2つの座標の長さをテキストで表示
  */
-kVector.prototype.showlenText = function(len,point){
+kVector.prototype.showlenText = function(len,point, color){
     var text = "wid:" + (this.kc.r(len[0],100)) +" , hgt:" + (this.kc.r(len[1],100));
 //    var text = "wid:" + Math.abs(this.kc.r(len[0],100)) +" , hgt:" + Math.abs(this.kc.r(len[1],100));
-    this.kc.strokeText(text, point[0] + 0.2 , point[1] + 0.2, "rgb(255, 255, 102)", 15);
+    this.kc.strokeText(text, point[0] + 0.2 , point[1] + 0.2, color, 15);
 }
 
 kVector.prototype.setStartPoint = function(e){
@@ -61,6 +69,28 @@ kVector.prototype.setVector = function(){
     //相対ベクトルを表示
     this.showlenText(veclen, this.endPoint);
 }
+
+kVector.prototype.showInfoVector = function(e){
+    if(this.vector1.length == 0 ){
+        return false;
+    }
+    //単位ベクトルを出す
+    var length = this.getVector( this.vec1len );
+    var unit = this.unitVector(length, this.vector1[1]);
+console.debug( "this.vec1.st:", this.vector1[0] );
+console.debug( "this.vec1len:", this.vec1len );
+    this.showlenText(unit, [this.vector1[1][0], this.vector1[1][1] - 0.5], "rgb(255, 104, 104)");
+
+
+
+    // var subed = this.subVector(this.vec1len, this.vec2len);
+    // var subedPoint = this.subVectorPoint( subed, this.vector1, this.vector2);
+    // this.showlenText(subed, subedPoint[1]);
+    // this.kc.stroke(subedPoint[0], subedPoint[1], "rgb(255, 255, 0)");
+    // this.kc.fillCircle(subedPoint[1], 0.05, Math.PI * 2, "rgb(255, 255, 0)", true);
+    this.destruct();
+}
+
 
 kVector.prototype.showAddVector = function(e){
     if(this.vector1.length == 0 || this.vector2.length == 0){
@@ -126,6 +156,12 @@ kVector.prototype.subVector = function(vec1len, vec2len){
 // console.debug("sub: x= ", sub[0], " y=", sub[1]  );
 
     return sub;
+}
+
+kVector.prototype.unitVector = function(veclen, vec){
+// console.debug( " lengthx: " ,vec[0], veclen, " lengthy: " ,vec[1],veclen);
+    var ret = [ f(vec[0]) / f(veclen) , f(vec[1]) / f(veclen)];
+    return ret;
 }
 
 kVector.prototype.destruct = function(){
