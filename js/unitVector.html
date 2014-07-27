@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="ja" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <title>unitVector</title>
+  </head>
+  <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
+  <script type="text/javascript" charset="utf-8" src="kVector.js"></script>
+  <body>
+座標上でクリックしてドラッグするとベクトルが出来るよ<br />
+ベクトルの情報が右に表示されるよ
+<br />
+    <canvas id="unitVector" width="600" height="600"></canvas>
+<script type="text/javascript">
+
+"use strict";
+var canvasId = "unitVector";
+
+var kv = new kVector(canvasId, 100);
+kv.init();
+kv.kc.canvas.addEventListener("mousedown",function(e){
+   kv.setStartPoint(e);
+  }, false);
+kv.kc.canvas.addEventListener("mouseup",function(e){
+   kv.setEndPoint(e);
+   kv.setVector();
+   if(kv.showInfoVector()){
+      kv = new kVector(canvasId, 100);
+   }
+  }, false);
+</script>
+    </body>
+</html>
