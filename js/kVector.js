@@ -80,14 +80,15 @@ kVector.prototype.showUnitVector = function(e){
     var unit = this.unitVector(magni, this.vec1len);
 
     this.kc.stroke(this.startPoint, this.endPoint);
-    this.showlenText(unit, [this.vector1[1][0], this.vector1[1][1] - 0.5], "rgb(255, 104, 104)");
+    this.showlenText(unit, unit, "rgb(255, 104, 104)");
 
-    var l =
-    [ this.vector1[0][0] + unit[0],
-    this.vector1[0][1] + unit[1]
-    ];
+    var u =
+        [
+            this.vector1[0][0] + unit[0],
+            this.vector1[0][1] + unit[1]
+        ];
 
-    this.kc.stroke(this.vector1[0], l, "#FFFF99" );
+    this.kc.stroke(this.vector1[0], u, "#FFFF99" );
 
     this.destruct();
 }
