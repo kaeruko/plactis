@@ -103,10 +103,6 @@ console.debug(seisyaei);
     this.destruct();
 }
 
-kVector.prototype.divideVector = function(){
-
-}
-
 kVector.prototype.innerProduct = function(vec1, vec2){
     var relative1 = this.relativeLen(vec1[0], vec1[1]);
     var relative2 = this.relativeLen(vec2[0], vec2[1]);
@@ -155,11 +151,23 @@ kVector.prototype.showDivideVector = function(e){
     var distance =  this.relativeLen(vec1, vec2);
     var xdiff = distance[0];
     var ydiff = distance[1];
-    var divide1 = 12;
-    var divide2 = 9;
+    var divide1 = this.count;
+    var divide2 = 10;
     var px =  ( ( divide1 * vec2[0] ) + ( divide2 * vec1[0] ) ) / (divide1 + divide2);
     var py =  ( ( divide1 * vec2[1] ) + ( divide2 * vec1[1] ) ) / (divide1 + divide2);
 
+    this.kc.ctx.clearRect( 300, 280, 500, 500);
+    this.kc.strokeText([ "x=",this.kc.r(px,100)," y=", this.kc.r(py,100) ], 0 , 0 , "rgb(25, 25, 0)" , 15);
+    this.kc.strokeText( [ divide1, divide2 ], -0 , -1 , "rgb(150, 0, 0)" , 15);
+
+
+
+    if(this.count == divide2){
+        this.count = 0;
+        this.init();
+    }else{
+        this.count ++;
+    }
     this.kc.stroke([0,0], vec1, "rgb(255, 255, 0)");
     this.kc.stroke([0,0], vec2, "rgb(255, 200, 100)");
 
