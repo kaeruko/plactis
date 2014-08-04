@@ -17,7 +17,7 @@ kVector.prototype.init = function(){
 /**
  * 斜辺の長さ出す
  */
-kVector.prototype.magnitude = function(len){
+kVector.prototype.distance = function(len){
     var ret = Math.sqrt( ( len[0] * len[0] ) + ( len[1] * len[1] ) );
     return ret;
 }
@@ -26,11 +26,8 @@ kVector.prototype.magnitude = function(len){
  * 2つの座標から相対座標を出す
  */
 kVector.prototype.relativeLen = function(start, end){
-    var ret = [
-        end[0] - start[0],
-        end[1] - start[1]
-    ]
-    return ret;
+    var vec1 = end, vec2 = start;
+    return this.subVector(vec1, vec2);
 }
 
 /**
@@ -74,7 +71,7 @@ kVector.prototype.showUnitVector = function(e){
         return false;
     }
     //斜辺の長さを出す
-    var magni = this.magnitude( this.vec1len );
+    var magni = this.distance( this.vec1len );
 
     //単位ベクトルを出す
     var unit = this.unitVector(magni, this.vec1len);
@@ -93,6 +90,38 @@ kVector.prototype.showUnitVector = function(e){
     this.destruct();
 }
 
+//内積を表示
+kVector.prototype.showInnerVector = function(e){
+    if(this.vector1.length == 0 || this.vector2.length == 0 ){
+        return false;
+    }
+    //正射影を出す
+    var seisyaei = this.innerProduct(this.vector1, this.vector2);
+debugVec(this.vector2);
+console.debug(seisyaei);
+
+    this.destruct();
+}
+
+kVector.prototype.divideVector = function(){
+
+}
+
+kVector.prototype.innerProduct = function(vec1, vec2){
+    var relative1 = this.relativeLen(vec1[0], vec1[1]);
+    var relative2 = this.relativeLen(vec2[0], vec2[1]);
+
+    var ret =
+        relative1[0] * relative2[0] + relative1[1] * relative2[1];
+    return ret;
+}
+
+function debugVec(vec) {
+    console.debug(" start.x ", vec[0][0]);
+    console.debug(" start.y ", vec[0][1]);
+    console.debug(" end.x ", vec[1][0]);
+    console.debug(" end.x ", vec[1][1]);
+}
 
 kVector.prototype.showAddVector = function(e){
     if(this.vector1.length == 0 || this.vector2.length == 0){
@@ -112,13 +141,33 @@ kVector.prototype.showSubVector = function(e){
         return false;
     }
 
-    var subed = this.subVector(this.vec1len, this.vec2len);
+    var subed = this.subVector(this.vec2len, this.vec1len);
     var subedPoint = this.subVectorPoint( subed, this.vector1, this.vector2);
     this.showlenText(subed, subedPoint[1]);
     this.kc.stroke(subedPoint[0], subedPoint[1], "rgb(255, 255, 0)");
     this.kc.fillCircle(subedPoint[1], 0.05, Math.PI * 2, "rgb(255, 255, 0)", true);
     this.destruct();
 }
+
+kVector.prototype.showDivideVector = function(e){
+    var vec1 = [1, 1];
+    var vec2 = [-0.5, 2];
+    var distance =  this.relativeLen(vec1, vec2);
+    var xdiff = distance[0];
+    var ydiff = distance[1];
+    var divide1 = 12;
+    var divide2 = 9;
+    var px =  ( ( divide1 * vec2[0] ) + ( divide2 * vec1[0] ) ) / (divide1 + divide2);
+    var py =  ( ( divide1 * vec2[1] ) + ( divide2 * vec1[1] ) ) / (divide1 + divide2);
+
+    this.kc.stroke([0,0], vec1, "rgb(255, 255, 0)");
+    this.kc.stroke([0,0], vec2, "rgb(255, 200, 100)");
+
+    this.kc.stroke([0,0], [px, py], "rgb(255, 255, 0)");
+    this.destruct();
+}
+
+
 
 kVector.prototype.addVectorPoint = function(add, vec1, vec2){
     var start = [  ( f(vec1[0][0]) + f(vec2[0][0]) )  / 2 ,
@@ -148,7 +197,7 @@ kVector.prototype.subVectorPoint = function(sub, vec1, vec2){
 kVector.prototype.subVector = function(vec1len, vec2len){
     //width, hight
     var sub = [
-        vec2len[0] - vec1len[0], vec2len[1] - vec1len[1]
+        vec1len[0] - vec2len[0], vec1len[1] - vec2len[1]
     ];
     return sub;
 }

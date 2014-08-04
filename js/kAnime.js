@@ -2,6 +2,7 @@ var kAnime = function(canvasId, scale){
     this.kc = new kCanvas(canvasId, scale);
     this.count = 0;
     this.theta = 0;
+    this.period = 12;
 }
 
 kAnime.prototype.draw = function(){
@@ -36,7 +37,6 @@ kAnime.prototype.trigonometoric = function(){
     this.count = 3;
 
     var radius = 1;
-    this.theta = (this.theta + this.kc.period2rad(180)) % (Math.PI * 2);
     var point = this.kc.rotate(this.theta, radius);
     var deg = this.kc.r(this.kc.rad2deg(this.theta),100);
     var costext = "cos:"+this.kc.r(Math.cos(this.theta),1000);
@@ -77,14 +77,21 @@ kAnime.prototype.trigonometoric = function(){
     this.kc.strokeText(sintext, point[0], point[1] / 2, "rgb(240, 150, 80)", 20);
     this.kc.strokeText(1, point[0] / 2, point[1] / 2, "rgb(0, 253, 153)", 2);
     if(cons[deg] && sins[deg]){
-        this.count += 5;
+        this.count += 10;
     }
+    this.theta = (this.theta + this.kc.period2rad(this.period)) % (Math.PI * 2);
 }
 
 kAnime.prototype.arctan = function(e){
-    var scaledownpoint = this.kc.scaledown([e.offsetX,e.offsetY]);
 
-    this.theta = Math.atan2(scaledownpoint[1],scaledownpoint[0]);
+    var scaledownpoint = this.kc.scaledown([e.offsetX,e.offsetY]);
+    //シータにして
+    var tmptheta = Math.atan2(scaledownpoint[1],scaledownpoint[0]);
+    //度数に変換して切りのいい数字にする
+    var tmpdeg = tmptheta *  this.period / ( 2 * Math.PI) % this.period;
+    tmpdeg = Math.round(tmpdeg);
+    this.theta =  ( 2* Math.PI / this.period * tmpdeg )  % (Math.PI *2);
+
     this.kc.fillCircle(scaledownpoint, 0.05, Math.PI * 2, "red", true);
 }
 

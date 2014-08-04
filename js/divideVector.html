@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="ja" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <title>divideVector</title>
+  </head>
+  <script type="text/javascript" charset="utf-8" src="kCanvas.js"></script>
+  <script type="text/javascript" charset="utf-8" src="kVector.js"></script>
+  <body>
+ドラッグして引っ張ると、ベクトルが出来るよ！<br />
+ベクトルを二つ作ると、引いたベクトルが出来るよ！
+<br />
+    <canvas id="divideVector" width="600" height="600"></canvas>
+<script type="text/javascript">
+
+"use strict";
+var canvasId = "divideVector";
+
+var kv = new kVector(canvasId, 100);
+kv.init();
+kv.showDivideVector();
+
+var t = setInterval("kv.showDivideVector()", 10000);
+
+</script>
+    </body>
+</html>

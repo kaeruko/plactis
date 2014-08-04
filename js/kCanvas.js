@@ -158,9 +158,8 @@ kCanvas.prototype.createGrad = function(colors, point, radius, theta , centerGap
 }
 
 kCanvas.prototype.period2rad = function(period, count) {
-    return ( Math.PI / period ) % (Math.PI * 2);
+    return ( Math.PI * 2 / period ) % (Math.PI * 2);
    // return (Math.PI / period * count) % Math.PI * 2;
-
 }
 
 kCanvas.prototype.deg2rad = function(degree) {
