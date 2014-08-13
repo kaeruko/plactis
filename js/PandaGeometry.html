@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>立方体オブジェクト</title>
+<script src="../javascript/three.js_r58/three.js"></script>  <!-- Three.js用ライブラリ -->
+<script src="../javascript/three.js_r58/controls/TrackballControls.js"></script> <!-- トラックボール用ライブラリ -->
+<style>
+*{padding:0px; margin:0px}
+div#canvas-frame{
+	width: 500px;  /* 横幅 */
+	height: 500px; /* 縦幅 */
+	overflow:hidden;
+}
+</style>
+<script>
+	//頭のオブジェクト
+	var headgroup = null;
+	////////////////////////////////////////////////////////////////////
+	// windowイベントの定義
+	////////////////////////////////////////////////////////////////////
+	window.addEventListener("load", function () {
+		resizeTo(516, 539);
+		threeStart(); //Three.jsのスタート関数の実行
+	});
+	var face = null;
+	////////////////////////////////////////////////////////////////////
+	// Three.jsスタート関数の定義
+	////////////////////////////////////////////////////////////////////
+	function threeStart() {
+		initThree();  //Three.js初期化関数の実行
+		initObject(); //オブジェクト初期化関数の実行
+		initCamera(); //カメラ初期化関数の実行
+		loop();       //無限ループ関数の実行
+	}
+	////////////////////////////////////////////////////////////////////
+	// Three.js初期化関数の定義
+	////////////////////////////////////////////////////////////////////
+	//グローバル変数の宣言
+	var renderer,    //レンダラーオブジェクト
+	    scene,       //シーンオブジェクト
+	    canvasFrame; //キャンバスフレームのDOM要素
+	function initThree() {
+		//キャンバスフレームDOM要素の取得
+		canvasFrame = document.getElementById('canvas-frame');
+		//レンダラーオブジェクトの生成
+		renderer = new THREE.WebGLRenderer({ antialias: true });
+		//renderer = new THREE.CanvasRenderer();//<------------------------------------------------------------------------------------------------------------（canvasレンダラー）
+
+		if (!renderer) alert('Three.js の初期化に失敗しました');
+		//レンダラーのサイズの設定
+		renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight);
+		//キャンバスフレームDOM要素にcanvas要素を追加
+		canvasFrame.appendChild(renderer.domElement);
+
+		//レンダラークリアーカラーの設定
+		renderer.setClearColor(0xEEEEEE, 1.0);
+
+		//シーンオブジェクトの生成
+		scene = new THREE.Scene();
+	}
+	////////////////////////////////////////////////////////////////////
+	// カメラ初期化関数の定義
+	////////////////////////////////////////////////////////////////////
+	//グローバル変数の宣言
+	var camera;    //カメラオブジェクト
+	function initCamera() {
+		//カメラオブジェクトの生成
+		camera = new THREE.PerspectiveCamera(90, canvasFrame.clientWidth / canvasFrame.clientHeight, 1, 10000);
+		//カメラの位置の設定
+		camera.position.set(0, 00, 100);
+		//カメラの上ベクトルの設定
+		camera.up.set(0, 10, 0);
+		//カメラの中心位置ベクトルの設定
+		camera.lookAt({ x: 0, y: 0, z: 0 }); //トラックボール利用時は自動的に無効
+
+		//トラックボールオブジェクトの宣言
+		trackball = new THREE.TrackballControls(camera, canvasFrame);
+
+		//トラックボール動作範囲のサイズとオフセットの設定
+		trackball.screen.width = canvasFrame.clientWidth;                        //横幅
+		trackball.screen.height = canvasFrame.clientHeight;                      //縦幅
+		trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left;  //左オフセット
+		trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top;    //右オフセット
+
+		//トラックボールの回転無効化と回転速度の設定
+		trackball.noRotate = false;
+		trackball.rotateSpeed = 4.0;
+
+		//トラックボールの拡大無効化と拡大速度の設定
+		trackball.noZoom = false;
+		trackball.zoomSpeed = 4.0;
+
+		//トラックボールのカメラ中心移動の無効化と中心速度の設定
+		trackball.noPan = false;
+		trackball.panSpeed = 1.0;
+		trackball.target = new THREE.Vector3(0, 0, 0);
+
+		//トラックボールのスタティックムーブの有効化
+		trackball.staticMoving = true;
+		//トラックボールのダイナミックムーブ時の減衰定数
+		trackball.dynamicDampingFactor = 0.3;
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// オブジェクト初期化関数の定義
+	////////////////////////////////////////////////////////////////////
+	//グローバル変数の宣言
+	var axis; //軸オブジェクト
+	var cube; //立方体オブジェクト
+	function initObject() {
+		//軸オブジェクトの生成
+		axis = new THREE.AxisHelper(100);
+		//軸オブジェクトのシーンへの追加
+		scene.add(axis);
+		//軸オブジェクトの位置座標を設定
+		axis.position.set(0, 0, 0);
+		makePanda();
+
+	}
+
+	//パンダを1体作る
+	function makePanda() {
+
+		//パンダのグループを作る
+		pandagroup = new THREE.Object3D();
+		scene.add(pandagroup);
+
+		//頭(顔/右耳/左耳)のグループを作る
+		headgroup = new THREE.Object3D();
+		pandagroup.add(headgroup);
+
+		//黒と白のマテリアルを作成
+		var materials_white = [];
+		materials_white[0] = new THREE.MeshBasicMaterial({color:0xffffff});
+		//材質オブジェクトの宣言と生成
+		var material_white = new THREE.MeshFaceMaterial(materials_white);
+
+		var materials_black = [];
+		materials_black[0] = new THREE.MeshBasicMaterial({color:0x000000});
+		//材質オブジェクトの宣言と生成
+		var material_black = new THREE.MeshFaceMaterial(materials_black);
+
+
+		//体
+		var body = makePandaParts(25, material_white, {x:0, y:0, z:0});
+		pandagroup.add(body);
+
+		//顔
+		var geometry = new THREE.SphereGeometry(18, 18, 18);
+ 		var pandatexture  = new THREE.ImageUtils.loadTexture('minipanda.png');
+		pandatexture.offset.x = 0.3;
+
+		//立方体オブジェクトの生成
+		face = new THREE.Mesh(geometry,
+			// material_white
+			new THREE.MeshPhongMaterial({
+				color: 0xff0000,
+				specular:0xff0000,
+				shininess:200,
+                 map: pandatexture
+            })
+		);
+		face.rotation.set( 0 , 0 , 0 );
+
+		//立方体オブジェクトの位置座標を設定
+		face.position.set(0, 30, 5);
+		//立方体オブジェクトのシーンへの追加
+		headgroup.add(face);
+
+		//右耳
+		var rightEar = makePandaParts(10, material_black, {x:15, y:46, z:5});
+		headgroup.add(rightEar);
+
+		//左耳
+		var leftEar = makePandaParts(10, material_black, {x:-15, y:46, z:5});
+		headgroup.add(leftEar);
+
+		//右手
+		var rightArm = makePandaParts(10, material_black, {x:15, y:10, z:10});
+		pandagroup.add(rightArm);
+
+		//左手
+		var leftArm = makePandaParts(10, material_black, {x:-15, y:10, z:10});
+		pandagroup.add(leftArm);
+
+		//右足
+		var rightLeg = makePandaParts(10, material_black, {x:20, y:-10, z:10});
+		pandagroup.add(rightLeg);
+
+		//左足
+		var leftLeg = makePandaParts(10, material_black, {x:-20, y:-10, z:10});
+		pandagroup.add(leftLeg);
+	}
+
+	//パンダのパーツを組み合わせる
+	function makePandaParts(size, color, coords) {
+		var geometry = new THREE.SphereGeometry(size, 25, 25);
+		//立方体オブジェクトの生成
+		var part = new THREE.Mesh(geometry, color);
+		part.position.set( coords.x, coords.y, coords.z);
+
+		//立方体オブジェクトのシーンへの追加
+		return part;
+	}
+
+	////////////////////////////////////////////////////////////////////
+	// 無限ループ関数の定義
+	////////////////////////////////////////////////////////////////////
+	//グローバル変数の宣言
+	var step = 0; //ステップ数
+	var faceswing = 0;
+	var hidari = false;
+	function loop() {
+		//トラックボールによるカメラオブジェクトのプロパティの更新
+		trackball.update();
+
+		if(faceswing < Math.PI / 2 && hidari == false){
+			faceswing += 1/ (2 * Math.PI  * 60 );
+		}else{
+			hidari = true;
+			faceswing -= 1/ (2 * Math.PI  * 60 );
+			if(faceswing < Math.PI / 2 * -1){
+				hidari = false;
+			}
+		}
+
+		pandagroup.rotation.set( 0 , faceswing  , 0 );
+
+		//ステップ数のインクリメント
+		step++;
+		//レンダリング
+		renderer.render(scene, camera);
+
+		//「loop()」関数の呼び出し
+		requestAnimationFrame(loop);
+
+	}
+</script>
+</head>
+<body>
+	<div id="canvas-frame"></div><!-- canvas要素を配置するdiv要素 -->
+</body>
+</html>
