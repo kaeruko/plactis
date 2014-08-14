@@ -134,27 +134,26 @@ var cityView = function(){
         scene.add(directionalLight);
 
 
-//下書き
+
+//マップの下書き
 var texture = THREE.ImageUtils.loadTexture('images/map2.png');
 //異方性フィルダリング指数の指定
 texture.anisotropy = renderer.getMaxAnisotropy();
 
 //材質オブジェクトの宣言と生成
 var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-//下書き
+//マップの下書き
 //        var material = new THREE.MeshPhongMaterial( { color: 0x666666 } );
 
+var geometry = new THREE.PlaneGeometry( 200, 200 );
+var plane = new THREE.Mesh(geometry, material);
+scene.add(plane);
+plane.position.set(0, 0, 0);
 
-        //
-        //形状オブジェクトの宣言と生成
-        var geometry = new THREE.PlaneGeometry( 200, 200 );
-        //平面オブジェクトの生成
-        var plane = new THREE.Mesh(geometry, material);
-        //平面オブジェクトのシーンへの追加
-        scene.add(plane);
-        //平面オブジェクトの位置座標を設定
-        plane.position.set(0, 0, 0);
 
+
+
+        //テクスチャ
         var texture = THREE.ImageUtils.loadTexture('images/white.png');
         //異方性フィルダリング指数の指定
         texture.anisotropy = renderer.getMaxAnisotropy();
@@ -224,13 +223,29 @@ var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 
 
         //アメダス
-
         var material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
         var geometry = new THREE.CylinderGeometry(8, 8, 10, 10  );
         var amedas = new THREE.Mesh(geometry, material);
         scene.add(amedas);
         amedas.position.set(-35, 0, 1);
         amedas.rotation.set( (Math.PI / 180 ) * 90 , 0 , 0 );
+        //アメダス
+
+
+
+        //消防本部
+        var centerStreet = new THREE.Shape();
+        centerStreet.moveTo(-40, 60, 0);
+        centerStreet.lineTo(-63, 60, 0);
+        centerStreet.lineTo(-55, 0, 0);
+        centerStreet.lineTo(-63, 0, 0);
+
+        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var centerStreet3d = centerStreet.extrude( extrudeSettings );
+        var centerStreetPoints = centerStreet.createPointsGeometry();
+        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -0, -0, 0, 0, 0, 0, 1 , null);
+        //消防本部
 
 
 
