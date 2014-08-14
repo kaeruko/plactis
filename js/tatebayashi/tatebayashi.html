@@ -26,12 +26,14 @@ var cityView = function(){
         this.initThree();  //Three.js初期化関数の実行
         this.initObject(); //オブジェクト初期化関数の実行
         this.initCamera(); //カメラ初期化関数の実行
+        this.initLight();
         this.loop();       //無限ループ関数の実行
     }
 
     var renderer,    //レンダラーオブジェクト
         scene,       //シーンオブジェクト
         canvasFrame; //キャンバスフレームのDOM要素
+
     cityView.prototype.initThree = function() {
         //キャンバスフレームDOM要素の取得
         canvasFrame = document.getElementById('main_frame');
@@ -100,47 +102,81 @@ var cityView = function(){
         //軸オブジェクトの位置座標を設定
         axis.position.set(0, 0, 0);
 
-        this.makeMap();
-    }
-
-    var mapgroup = null;
-    cityView.prototype.makeMap = function() {
-
-
-
-
-
-
-
         //マップのグループを作る
         mapgroup = new THREE.Object3D();
         scene.add(mapgroup);
 
+        this.makeMap();
+    }
+
+    var mapgroup = null;
+
+    cityView.prototype.initLight = function() {
         //平行光源オブジェクトの生成
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1.0, 0);
         //平行光源オブジェクトの位置の設定
         directionalLight.position.set(0, 0, 1);
         //平行光源オブジェクトのシーンへの追加
         scene.add(directionalLight);
+    }
+
+    cityView.prototype.makeMap = function() {
+
+    var object_tree_params = [
+        //南北に走る道路
+        { name:"centerStreet", type:"polygon", posi:[-40, -95, 1],
+              edges:[[22,118],
+                     [23,118], [38,0], [37,0]],
+              color: 0x5A5850
+        },
+        //南東の道路
+        { name:"DanchiStreet", type:"polygon", posi:[-40, -95, 1],
+              edges:[[33 , 36],
+                     [140, 36], [140, 35], [33 , 35]],
+              color: 0x5A5850
+        },
+        //東端の道路
+        { name:"DanchiStreet", type:"polygon", posi:[-40, -95, 1],
+              edges:[[-55, 60],
+                     [-56, 60], [-54, 0], [-56, 0]],
+              color: 0x5A5850
+        },
+        //消防署
+        { name:"fireofficeStreet", type:"polygon", posi:[0, 0, 1],
+              edges:[[-70, 0],
+                     [-60, 2], [-49, -70], [-59, -72]],
+              color: 0x999999,
+              amount: 10
+        },
+
+        //地図
+        { name:"map", type:"plane", posi:[0, 0, 0],
+          texture:{imgsrc:"images/map2.png", offset:[0, 0, 0]},
+          width:200, height:200
+        }
+
+
+    ];
 
 
 
-//マップの下書き
-var texture = THREE.ImageUtils.loadTexture('images/map2.png');
-//異方性フィルダリング指数の指定
-texture.anisotropy = renderer.getMaxAnisotropy();
+    var object_tree = {};
+        var pandaObject = new Object3DMaker();
+        var pandagroup = pandaObject.make(object_tree_params);
+    mapgroup.add(pandagroup);
 
-//材質オブジェクトの宣言と生成
-var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 //マップの下書き
 //        var material = new THREE.MeshPhongMaterial( { color: 0x666666 } );
 
-var geometry = new THREE.PlaneGeometry( 200, 200 );
-var plane = new THREE.Mesh(geometry, material);
-scene.add(plane);
-plane.position.set(0, 0, 0);
 
+// var texture = THREE.ImageUtils.loadTexture('images/map2.png');
+// //材質オブジェクトの宣言と生成
+// var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 
+// var geometry = new THREE.PlaneGeometry( 200, 200 );
+// var plane = new THREE.Mesh(geometry, material);
+// scene.add(plane);
+// plane.position.set(0, 0, 0);
 
 
         //テクスチャ
@@ -167,51 +203,6 @@ plane.position.set(0, 0, 0);
         //アスファルト
 
 
-        //南北に走る道路
-        var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(22,118, 0);
-        centerStreet.lineTo(23,118, 0);
-        centerStreet.lineTo(38,0, 0);
-        centerStreet.lineTo(37,0, 0);
-
-        var extrudeSettings = { amount: 0,  bevelSegments: 0 };
-        var centerStreet3d = centerStreet.extrude( extrudeSettings );
-        var centerStreetPoints = centerStreet.createPointsGeometry();
-        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, 0x5A5850, -40, -95, 0, null);
-        //南北に走る道路
-
-
-
-        //南東の道路
-        var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(33 , 36, 0);
-        centerStreet.lineTo(140, 36, 0);
-        centerStreet.lineTo(140, 35, 0);
-        centerStreet.lineTo(33 , 35, 0);
-
-        var extrudeSettings = { amount: 0, bevelSegments: 0 };
-        var centerStreet3d = centerStreet.extrude( extrudeSettings );
-        var centerStreetPoints = centerStreet.createPointsGeometry();
-        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, 0x5A5850, -40, -95, 0, null);
-        //南東の道路
-
-
-        //東端の道路
-        var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(-65, 60, 0);
-        centerStreet.lineTo(-63, 60, 0);
-        centerStreet.lineTo(-55, 0, 0);
-        centerStreet.lineTo(-63, 0, 0);
-
-        var extrudeSettings = { amount: 0, bevelSegments: 0 };
-        var centerStreet3d = centerStreet.extrude( extrudeSettings );
-        var centerStreetPoints = centerStreet.createPointsGeometry();
-        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, 0x5A5850, -40, -95, 0, null);
-
-
         //アメダス
         var material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
         var geometry = new THREE.CylinderGeometry(8, 8, 10, 10  );
@@ -223,27 +214,10 @@ plane.position.set(0, 0, 0);
 
 
 
-        //消防本部
-        var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(-70, 0, 0);
-        centerStreet.lineTo(-60, 2, 0);
-        centerStreet.lineTo(-49, -70, 0);
-        centerStreet.lineTo(-59, -72, 0);
-
-        var extrudeSettings = { amount: 10, bevelSegments: 0 };
-        var centerStreet3d = centerStreet.extrude( extrudeSettings );
-        addGeometry( centerStreet3d, 0x5A5850, -0, -0, 0, null);
-        //消防本部
+//ストレージテスト
+sessionStorage.setItem("test_key","aaa");
 
 
-
-    }
-
-    function addGeometry( geometry, color, x, y, z, texture) {
-
-        var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color, map: texture } ), new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false, transparent: false } ) ] );
-        mesh.position.set( x, y, 1 );
-        scene.add( mesh );
     }
 
 
