@@ -223,6 +223,17 @@ var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
         addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
 
 
+        //アメダス
+
+        var material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+        var geometry = new THREE.CylinderGeometry(8, 8, 10, 10  );
+        var amedas = new THREE.Mesh(geometry, material);
+        scene.add(amedas);
+        amedas.position.set(-35, 0, 1);
+        amedas.rotation.set( (Math.PI / 180 ) * 90 , 0 , 0 );
+
+
+
     }
 
     function addGeometry( geometry, points, spacedPoints, color, x, y, z, rx, ry, rz, s , texture) {
