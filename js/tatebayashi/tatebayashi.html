@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>暑いぞ！館林 ~最高気温で町おこし~</title>
-<script src="/three.js/three.js"></script>
-<script src="/three.js/controls/TrackballControls.js"></script>
+<script src="three.js/three.js"></script>
+<script src="three.js/controls/TrackballControls.js"></script>
 <style>
 *{padding:0px; margin:0px}
 div#main_frame{
@@ -22,22 +22,13 @@ window.addEventListener("load", function() {
 
 var cityView = function(){
 
-    //頭のオブジェクト
-    var headgroup = null;
-    var face = null;
-    ////////////////////////////////////////////////////////////////////
-    // Three.jsスタート関数の定義
-    ////////////////////////////////////////////////////////////////////
     cityView.prototype.threeStart = function() {
         this.initThree();  //Three.js初期化関数の実行
         this.initObject(); //オブジェクト初期化関数の実行
         this.initCamera(); //カメラ初期化関数の実行
         this.loop();       //無限ループ関数の実行
     }
-    ////////////////////////////////////////////////////////////////////
-    // Three.js初期化関数の定義
-    ////////////////////////////////////////////////////////////////////
-    //グローバル変数の宣言
+
     var renderer,    //レンダラーオブジェクト
         scene,       //シーンオブジェクト
         canvasFrame; //キャンバスフレームのDOM要素
@@ -59,10 +50,7 @@ var cityView = function(){
         //シーンオブジェクトの生成
         scene = new THREE.Scene();
     }
-    ////////////////////////////////////////////////////////////////////
-    // カメラ初期化関数の定義
-    ////////////////////////////////////////////////////////////////////
-    //グローバル変数の宣言
+
     var camera;    //カメラオブジェクト
     var trackball;
     cityView.prototype.initCamera = function() {
@@ -103,12 +91,7 @@ var cityView = function(){
         trackball.dynamicDampingFactor = 0.3;
     }
 
-    ////////////////////////////////////////////////////////////////////
-    // オブジェクト初期化関数の定義
-    ////////////////////////////////////////////////////////////////////
-    //グローバル変数の宣言
     var axis; //軸オブジェクト
-    var cube; //立方体オブジェクト
     cityView.prototype.initObject = function() {
         //軸オブジェクトの生成
         axis = new THREE.AxisHelper(100);
@@ -122,6 +105,44 @@ var cityView = function(){
 
     var mapgroup = null;
     cityView.prototype.makeMap = function() {
+
+    // var object_tree_params = [
+    //     { name:"body", type:"circle", posi:[0,0,0], size:25,
+    //       color:material_white },
+    //     { name:"headGroup",
+    //       group:[
+    //         { name:"rightEar", type:"circle", posi:[15,46, 5], size:10,
+    //           color:'black' },
+    //         { name:"leftEar", type:"circle", posi:[-15,46, 5], size:10,
+    //           color:'black' },
+    //         { name:"face", type:"circle", posi:[0, 30, 5], size:18,
+    //           texture:{imgsrc:"minipanda.png", offset:[0.3, 0, 0] }
+    //         }
+    //       ]
+    //     },
+    //     { name:"rightArm", type:"circle", posi:[15, 10, 10], size:10,
+    //     color:'black' },
+    //     { name:"leftArm", type:"circle", posi:[-15, 10, 10], size:10,
+    //     color:'black' },
+    //     { name:"rightLeg", type:"circle", posi:[20, -10, 10], size:10,
+    //     color:'black' },
+    //     { name:"leftLeg", type:"circle", posi:[-20, -10, 10], size:10,
+    //     color:'black' },
+    // ];
+
+    // var object_tree = {};
+    //     pandaObject = new Object3DMaker();
+    //     pandagroup = pandaObject.make(object_tree_params);
+    // scene.add(pandagroup);
+    // return;
+
+
+
+
+
+
+
+
         //マップのグループを作る
         mapgroup = new THREE.Object3D();
         scene.add(mapgroup);
@@ -184,7 +205,7 @@ plane.position.set(0, 0, 0);
         centerStreet.lineTo(38,0, 0);
         centerStreet.lineTo(37,0, 0);
 
-        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var extrudeSettings = { amount: 0,  bevelSegments: 0 };
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
@@ -200,7 +221,7 @@ plane.position.set(0, 0, 0);
         centerStreet.lineTo(140, 35, 0);
         centerStreet.lineTo(33 , 35, 0);
 
-        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var extrudeSettings = { amount: 0, bevelSegments: 0 };
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
@@ -215,7 +236,7 @@ plane.position.set(0, 0, 0);
         centerStreet.lineTo(-55, 0, 0);
         centerStreet.lineTo(-63, 0, 0);
 
-        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var extrudeSettings = { amount: 0, bevelSegments: 0 };
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
@@ -240,7 +261,7 @@ plane.position.set(0, 0, 0);
         centerStreet.lineTo(-55, 0, 0);
         centerStreet.lineTo(-63, 0, 0);
 
-        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var extrudeSettings = { amount: 0, bevelSegments: 0 };
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
