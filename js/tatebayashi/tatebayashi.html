@@ -145,7 +145,7 @@ var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 //        var material = new THREE.MeshPhongMaterial( { color: 0x666666 } );
 
 
-        //アスファルト
+        //
         //形状オブジェクトの宣言と生成
         var geometry = new THREE.PlaneGeometry( 200, 200 );
         //平面オブジェクトの生成
@@ -204,7 +204,7 @@ var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 );
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , texture);
         //南北に走る道路
 
 
@@ -220,15 +220,15 @@ var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 );
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , texture);
 
 
 
     }
 
-    function addGeometry( geometry, points, spacedPoints, color, x, y, z, rx, ry, rz, s ) {
+    function addGeometry( geometry, points, spacedPoints, color, x, y, z, rx, ry, rz, s , texture) {
 
-        var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color } ), new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false, transparent: false } ) ] );
+        var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color, map: texture } ), new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false, transparent: false } ) ] );
         mesh.position.set( x, y, 1 );
         scene.add( mesh );
     }
