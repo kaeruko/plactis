@@ -106,37 +106,6 @@ var cityView = function(){
     var mapgroup = null;
     cityView.prototype.makeMap = function() {
 
-    // var object_tree_params = [
-    //     { name:"body", type:"circle", posi:[0,0,0], size:25,
-    //       color:material_white },
-    //     { name:"headGroup",
-    //       group:[
-    //         { name:"rightEar", type:"circle", posi:[15,46, 5], size:10,
-    //           color:'black' },
-    //         { name:"leftEar", type:"circle", posi:[-15,46, 5], size:10,
-    //           color:'black' },
-    //         { name:"face", type:"circle", posi:[0, 30, 5], size:18,
-    //           texture:{imgsrc:"minipanda.png", offset:[0.3, 0, 0] }
-    //         }
-    //       ]
-    //     },
-    //     { name:"rightArm", type:"circle", posi:[15, 10, 10], size:10,
-    //     color:'black' },
-    //     { name:"leftArm", type:"circle", posi:[-15, 10, 10], size:10,
-    //     color:'black' },
-    //     { name:"rightLeg", type:"circle", posi:[20, -10, 10], size:10,
-    //     color:'black' },
-    //     { name:"leftLeg", type:"circle", posi:[-20, -10, 10], size:10,
-    //     color:'black' },
-    // ];
-
-    // var object_tree = {};
-    //     pandaObject = new Object3DMaker();
-    //     pandagroup = pandaObject.make(object_tree_params);
-    // scene.add(pandagroup);
-    // return;
-
-
 
 
 
@@ -209,7 +178,7 @@ plane.position.set(0, 0, 0);
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
+        addGeometry( centerStreet3d, 0x5A5850, -40, -95, 0, null);
         //南北に走る道路
 
 
@@ -225,7 +194,7 @@ plane.position.set(0, 0, 0);
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
+        addGeometry( centerStreet3d, 0x5A5850, -40, -95, 0, null);
         //南東の道路
 
 
@@ -240,7 +209,7 @@ plane.position.set(0, 0, 0);
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
+        addGeometry( centerStreet3d, 0x5A5850, -40, -95, 0, null);
 
 
         //アメダス
@@ -261,18 +230,16 @@ plane.position.set(0, 0, 0);
         centerStreet.lineTo(-55, 0, 0);
         centerStreet.lineTo(-63, 0, 0);
 
-        var extrudeSettings = { amount: 0, bevelSegments: 0 };
+        var extrudeSettings = { amount: 4, bevelSegments: 0 };
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
-        var centerStreetPoints = centerStreet.createPointsGeometry();
-        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -0, -0, 0, 0, 0, 0, 1 , null);
+        addGeometry( centerStreet3d, 0x5A5850, -0, -0, 0, null);
         //消防本部
 
 
 
     }
 
-    function addGeometry( geometry, points, spacedPoints, color, x, y, z, rx, ry, rz, s , texture) {
+    function addGeometry( geometry, color, x, y, z, texture) {
 
         var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color, map: texture } ), new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false, transparent: false } ) ] );
         mesh.position.set( x, y, 1 );
@@ -294,30 +261,6 @@ plane.position.set(0, 0, 0);
         ctx.quadraticCurveTo( x, y, x, y + radius );
         ctx.closePath();
     }
-
-
-
-//         //下に向かった道路
-//         var geometry = new THREE.CubeGeometry(20, 20, 20); // Create a 20 by 20 by 20 cube.
-
-// var extrudeSettings = {
-//                 bevelEnabled: false,
-//                 steps: 1,
-//                 amount: 20, //extrusion depth, don't define an extrudePath
-//                 material:0, //material index of the front and back face
-//                 extrudeMaterial : 1 //material index of the side faces
-//             };
-
-// var geometry = shape.extrude(extrudeSettings);
-
-// var plane = new THREE.Mesh(geometry,
-//     new THREE.MeshFaceMaterial([materialFace, materialSide]));
-//             //平面オブジェクトのシーンへの追加
-//         scene.add(plane);
-//         //平面オブジェクトの位置座標を設定
-//         plane.position.set(70, -70, 1);
-//         //下に向かった道路
-
 
 
         //複製
