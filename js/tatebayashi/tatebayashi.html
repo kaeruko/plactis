@@ -135,7 +135,7 @@ var cityView = function(){
 
 
 //下書き
-var texture = THREE.ImageUtils.loadTexture('images/map.png');
+var texture = THREE.ImageUtils.loadTexture('images/map2.png');
 //異方性フィルダリング指数の指定
 texture.anisotropy = renderer.getMaxAnisotropy();
 
@@ -168,60 +168,59 @@ var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
         var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
 
         //形状オブジェクトの宣言と生成
-        var geometry = new THREE.PlaneGeometry( 200, 10 );
+        var geometry = new THREE.PlaneGeometry( 200, 7 );
         //平面オブジェクトの生成
         var plane = new THREE.Mesh(geometry, material);
         //平面オブジェクトのシーンへの追加
         scene.add(plane);
         //平面オブジェクトの位置座標を設定
-        plane.position.set(0, 20, 1);
+        plane.position.set(0, 25, 1);
         //アスファルト
-
-
-
-        //公園
-        var material = new THREE.MeshPhongMaterial( { color: 0x66FFCC } );
-        //形状オブジェクトの宣言と生成
-        var geometry = new THREE.PlaneGeometry( 50, 50 );
-        //平面オブジェクトの生成
-        var plane = new THREE.Mesh(geometry, material);
-        //平面オブジェクトのシーンへの追加
-        scene.add(plane);
-        //平面オブジェクトの位置座標を設定
-        plane.position.set(70, -70, 1);
-        //公園
-
 
 
         //南北に走る道路
         var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(10,110, 0);
-        centerStreet.lineTo(15,110, 0);
-        centerStreet.lineTo(25,0, 0);
-        centerStreet.lineTo(20,0, 0);
+        centerStreet.moveTo(22,118, 0);
+        centerStreet.lineTo(23,118, 0);
+        centerStreet.lineTo(38,0, 0);
+        centerStreet.lineTo(37,0, 0);
 
         var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , texture);
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
         //南北に走る道路
 
 
 
         //南東の道路
         var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(20,55, 0);
-        centerStreet.lineTo(140,55, 0);
-        centerStreet.lineTo(140,60, 0);
-        centerStreet.lineTo(20,60, 0);
+        centerStreet.moveTo(33 , 36, 0);
+        centerStreet.lineTo(140, 36, 0);
+        centerStreet.lineTo(140, 35, 0);
+        centerStreet.lineTo(33 , 35, 0);
 
         var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         var centerStreetPoints = centerStreet.createPointsGeometry();
         var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
-        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , texture);
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
+        //南東の道路
 
+
+        //東端の道路
+        var centerStreet = new THREE.Shape();
+        centerStreet.moveTo(-65, 60, 0);
+        centerStreet.lineTo(-63, 60, 0);
+        centerStreet.lineTo(-55, 0, 0);
+        centerStreet.lineTo(-63, 0, 0);
+
+        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var centerStreet3d = centerStreet.extrude( extrudeSettings );
+        var centerStreetPoints = centerStreet.createPointsGeometry();
+        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 , null);
 
 
     }
