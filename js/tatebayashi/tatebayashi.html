@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>暑いぞ！館林 ~最高気温で町おこし~</title>
+<script src="three.js/three.js"></script>
+<script src="three.js/controls/TrackballControls.js"></script>
+<style>
+*{padding:0px; margin:0px}
+div#main_frame{
+    width: 500px;  /* 横幅 */
+    height: 500px; /* 縦幅 */
+    overflow:hidden;
+}
+</style>
+<script>
+"use strict";
+window.addEventListener("load", function() {
+    var cityobj = new cityView();
+    cityobj.threeStart();
+});
+
+var cityView = function(){
+
+    //頭のオブジェクト
+    var headgroup = null;
+    var face = null;
+    ////////////////////////////////////////////////////////////////////
+    // Three.jsスタート関数の定義
+    ////////////////////////////////////////////////////////////////////
+    cityView.prototype.threeStart = function() {
+        this.initThree();  //Three.js初期化関数の実行
+        this.initObject(); //オブジェクト初期化関数の実行
+        this.initCamera(); //カメラ初期化関数の実行
+        this.loop();       //無限ループ関数の実行
+    }
+    ////////////////////////////////////////////////////////////////////
+    // Three.js初期化関数の定義
+    ////////////////////////////////////////////////////////////////////
+    //グローバル変数の宣言
+    var renderer,    //レンダラーオブジェクト
+        scene,       //シーンオブジェクト
+        canvasFrame; //キャンバスフレームのDOM要素
+    cityView.prototype.initThree = function() {
+        //キャンバスフレームDOM要素の取得
+        canvasFrame = document.getElementById('main_frame');
+        //レンダラーオブジェクトの生成
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+
+        if (!renderer) alert('Three.js の初期化に失敗しました');
+        //レンダラーのサイズの設定
+        renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight);
+        //キャンバスフレームDOM要素にcanvas要素を追加
+        canvasFrame.appendChild(renderer.domElement);
+
+        //レンダラークリアーカラーの設定
+        renderer.setClearColor(0xEEEEEE, 1.0);
+
+        //シーンオブジェクトの生成
+        scene = new THREE.Scene();
+    }
+    ////////////////////////////////////////////////////////////////////
+    // カメラ初期化関数の定義
+    ////////////////////////////////////////////////////////////////////
+    //グローバル変数の宣言
+    var camera;    //カメラオブジェクト
+    var trackball;
+    cityView.prototype.initCamera = function() {
+        //カメラオブジェクトの生成
+        camera = new THREE.PerspectiveCamera(90, canvasFrame.clientWidth / canvasFrame.clientHeight, 1, 10000);
+        //カメラの位置の設定
+        camera.position.set(0, 0, 100);
+        //カメラの上ベクトルの設定
+        camera.up.set(0, 10, 0);
+        //カメラの中心位置ベクトルの設定
+        camera.lookAt({ x: 0, y: 0, z: 0 }); //トラックボール利用時は自動的に無効
+
+        //トラックボールオブジェクトの宣言
+        trackball = new THREE.TrackballControls(camera, canvasFrame);
+
+        //トラックボール動作範囲のサイズとオフセットの設定
+        trackball.screen.width = canvasFrame.clientWidth;                        //横幅
+        trackball.screen.height = canvasFrame.clientHeight;                      //縦幅
+        trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left;  //左オフセット
+        trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top;    //右オフセット
+
+        //トラックボールの回転無効化と回転速度の設定
+        trackball.noRotate = false;
+        trackball.rotateSpeed = 4.0;
+
+        //トラックボールの拡大無効化と拡大速度の設定
+        trackball.noZoom = false;
+        trackball.zoomSpeed = 4.0;
+
+        //トラックボールのカメラ中心移動の無効化と中心速度の設定
+        trackball.noPan = false;
+        trackball.panSpeed = 1.0;
+        trackball.target = new THREE.Vector3(0, 0, 0);
+
+        //トラックボールのスタティックムーブの有効化
+        trackball.staticMoving = true;
+        //トラックボールのダイナミックムーブ時の減衰定数
+        trackball.dynamicDampingFactor = 0.3;
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    // オブジェクト初期化関数の定義
+    ////////////////////////////////////////////////////////////////////
+    //グローバル変数の宣言
+    var axis; //軸オブジェクト
+    var cube; //立方体オブジェクト
+    cityView.prototype.initObject = function() {
+        //軸オブジェクトの生成
+        axis = new THREE.AxisHelper(100);
+        //軸オブジェクトのシーンへの追加
+        scene.add(axis);
+        //軸オブジェクトの位置座標を設定
+        axis.position.set(0, 0, 0);
+
+        this.makeMap();
+    }
+
+    var mapgroup = null;
+    cityView.prototype.makeMap = function() {
+        //マップのグループを作る
+        mapgroup = new THREE.Object3D();
+        scene.add(mapgroup);
+
+        //平行光源オブジェクトの生成
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1.0, 0);
+        //平行光源オブジェクトの位置の設定
+        directionalLight.position.set(0, 0, 1);
+        //平行光源オブジェクトのシーンへの追加
+        scene.add(directionalLight);
+
+
+//下書き
+var texture = THREE.ImageUtils.loadTexture('images/map.png');
+//異方性フィルダリング指数の指定
+texture.anisotropy = renderer.getMaxAnisotropy();
+
+//材質オブジェクトの宣言と生成
+var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+//下書き
+//        var material = new THREE.MeshPhongMaterial( { color: 0x666666 } );
+
+
+        //アスファルト
+        //形状オブジェクトの宣言と生成
+        var geometry = new THREE.PlaneGeometry( 200, 200 );
+        //平面オブジェクトの生成
+        var plane = new THREE.Mesh(geometry, material);
+        //平面オブジェクトのシーンへの追加
+        scene.add(plane);
+        //平面オブジェクトの位置座標を設定
+        plane.position.set(0, 0, 0);
+
+        var texture = THREE.ImageUtils.loadTexture('images/white.png');
+        //異方性フィルダリング指数の指定
+        texture.anisotropy = renderer.getMaxAnisotropy();
+        //テクスチャラッピングの指定
+        texture.wrapS = THREE.RepeatWrapping; //x軸方向
+        texture.wrapT = THREE.RepeatWrapping; //y軸方向
+        //リピートの指定
+        texture.repeat.set( 10, 1 );
+
+        //材質オブジェクトの宣言と生成
+        var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
+
+        //形状オブジェクトの宣言と生成
+        var geometry = new THREE.PlaneGeometry( 200, 10 );
+        //平面オブジェクトの生成
+        var plane = new THREE.Mesh(geometry, material);
+        //平面オブジェクトのシーンへの追加
+        scene.add(plane);
+        //平面オブジェクトの位置座標を設定
+        plane.position.set(0, 20, 1);
+        //アスファルト
+
+
+
+        //公園
+        var material = new THREE.MeshPhongMaterial( { color: 0x66FFCC } );
+        //形状オブジェクトの宣言と生成
+        var geometry = new THREE.PlaneGeometry( 50, 50 );
+        //平面オブジェクトの生成
+        var plane = new THREE.Mesh(geometry, material);
+        //平面オブジェクトのシーンへの追加
+        scene.add(plane);
+        //平面オブジェクトの位置座標を設定
+        plane.position.set(70, -70, 1);
+        //公園
+
+
+
+        //南北に走る道路
+        var centerStreet = new THREE.Shape();
+        centerStreet.moveTo(10,110, 0);
+        centerStreet.lineTo(15,110, 0);
+        centerStreet.lineTo(25,0, 0);
+        centerStreet.lineTo(20,0, 0);
+
+        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var centerStreet3d = centerStreet.extrude( extrudeSettings );
+        var centerStreetPoints = centerStreet.createPointsGeometry();
+        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 );
+        //南北に走る道路
+
+
+
+        //南東の道路
+        var centerStreet = new THREE.Shape();
+        centerStreet.moveTo(20,55, 0);
+        centerStreet.lineTo(140,55, 0);
+        centerStreet.lineTo(140,60, 0);
+        centerStreet.lineTo(20,60, 0);
+
+        var extrudeSettings = { amount: 0,  bevelEnabled: true, bevelSegments: 0, steps: 2 }; // bevelSegments: 2, steps: 2 , bevelSegments: 5, bevelSize: 8, bevelThickness:5,
+        var centerStreet3d = centerStreet.extrude( extrudeSettings );
+        var centerStreetPoints = centerStreet.createPointsGeometry();
+        var centerStreetSpacedPoints = centerStreet.createSpacedPointsGeometry();
+        addGeometry( centerStreet3d, centerStreetPoints, centerStreetSpacedPoints,  0x5A5850, -40, -95, 0, 0, 0, 0, 1 );
+
+
+
+    }
+
+    function addGeometry( geometry, points, spacedPoints, color, x, y, z, rx, ry, rz, s ) {
+
+        var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [ new THREE.MeshLambertMaterial( { color: color } ), new THREE.MeshBasicMaterial( { color: 0x00FF00, wireframe: false, transparent: false } ) ] );
+        mesh.position.set( x, y, 1 );
+        scene.add( mesh );
+    }
+
+
+    function headBuild(ctx, x, y, width, height, radius)
+    {
+        ctx.moveTo( x, y + radius );
+
+        ctx.lineTo( x, y + height - radius );
+        ctx.quadraticCurveTo( x, y + height, x + radius, y + height );
+        ctx.lineTo( x + width - radius, y + height) ;
+        ctx.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
+        ctx.lineTo( x + width, y + radius );
+        ctx.quadraticCurveTo( x + width, y, x + width - radius, y );
+        ctx.lineTo( x + radius, y );
+        ctx.quadraticCurveTo( x, y, x, y + radius );
+        ctx.closePath();
+    }
+
+
+
+//         //下に向かった道路
+//         var geometry = new THREE.CubeGeometry(20, 20, 20); // Create a 20 by 20 by 20 cube.
+
+// var extrudeSettings = {
+//                 bevelEnabled: false,
+//                 steps: 1,
+//                 amount: 20, //extrusion depth, don't define an extrudePath
+//                 material:0, //material index of the front and back face
+//                 extrudeMaterial : 1 //material index of the side faces
+//             };
+
+// var geometry = shape.extrude(extrudeSettings);
+
+// var plane = new THREE.Mesh(geometry,
+//     new THREE.MeshFaceMaterial([materialFace, materialSide]));
+//             //平面オブジェクトのシーンへの追加
+//         scene.add(plane);
+//         //平面オブジェクトの位置座標を設定
+//         plane.position.set(70, -70, 1);
+//         //下に向かった道路
+
+
+
+        //複製
+        // var load = plane.clone();
+        // scene.add(load);
+        // //平面オブジェクトの位置座標を設定
+        // load.position.set(0, -10, 1);
+
+
+
+    var pandagroup = null;
+    //パンダを1体作る
+    cityView.prototype.makePanda = function() {
+
+        //パンダのグループを作る
+        pandagroup = new THREE.Object3D();
+        scene.add(pandagroup);
+
+        //頭(顔/右耳/左耳)のグループを作る
+        headgroup = new THREE.Object3D();
+        pandagroup.add(headgroup);
+
+        //黒と白のマテリアルを作成
+        var materials_white = [];
+        materials_white[0] = new THREE.MeshBasicMaterial({color:0xffffff});
+        //材質オブジェクトの宣言と生成
+        var material_white = new THREE.MeshFaceMaterial(materials_white);
+
+        var materials_black = [];
+        materials_black[0] = new THREE.MeshBasicMaterial({color:0x000000});
+        //材質オブジェクトの宣言と生成
+        var material_black = new THREE.MeshFaceMaterial(materials_black);
+
+
+        //体
+        var body = this.makePandaParts(25, material_white, {x:0, y:0, z:0});
+        pandagroup.add(body);
+
+        //顔
+        var geometry = new THREE.SphereGeometry(18, 18, 18);
+        var pandatexture  = new THREE.ImageUtils.loadTexture('minipanda.png');
+        pandatexture.offset.x = 0.3;
+
+        //立方体オブジェクトの生成
+        face = new THREE.Mesh(geometry,
+            // material_white
+            new THREE.MeshPhongMaterial({
+                color: 0xff0000,
+                specular:0xff0000,
+                shininess:200,
+                 map: pandatexture
+            })
+        );
+        face.rotation.set( 0 , 0 , 0 );
+
+        //立方体オブジェクトの位置座標を設定
+        face.position.set(0, 30, 5);
+        //立方体オブジェクトのシーンへの追加
+        headgroup.add(face);
+
+        //右耳
+        var rightEar = this.makePandaParts(10, material_black, {x:15, y:46, z:5});
+        headgroup.add(rightEar);
+
+        //左耳
+        var leftEar = this.makePandaParts(10, material_black, {x:-15, y:46, z:5});
+        headgroup.add(leftEar);
+
+        //右手
+        var rightArm = this.makePandaParts(10, material_black, {x:15, y:10, z:10});
+        pandagroup.add(rightArm);
+
+        //左手
+        var leftArm = this.makePandaParts(10, material_black, {x:-15, y:10, z:10});
+        pandagroup.add(leftArm);
+
+        //右足
+        var rightLeg = this.makePandaParts(10, material_black, {x:20, y:-10, z:10});
+        pandagroup.add(rightLeg);
+
+        //左足
+        var leftLeg = this.makePandaParts(10, material_black, {x:-20, y:-10, z:10});
+        pandagroup.add(leftLeg);
+    }
+
+    //パンダのパーツを組み合わせる
+    cityView.prototype.makePandaParts = function(size, color, coords) {
+        var geometry = new THREE.SphereGeometry(size, 25, 25);
+        //立方体オブジェクトの生成
+        var part = new THREE.Mesh(geometry, color);
+        part.position.set( coords.x, coords.y, coords.z);
+
+        //立方体オブジェクトのシーンへの追加
+        return part;
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    // 無限ループ関数の定義
+    ////////////////////////////////////////////////////////////////////
+    //グローバル変数の宣言
+    var step = 0; //ステップ数
+    var faceswing = 0;
+    var hidari = false;
+    cityView.prototype.loop = function() {
+        //トラックボールによるカメラオブジェクトのプロパティの更新
+        trackball.update();
+
+        if(faceswing < Math.PI / 2 && hidari == false){
+            faceswing += 1/ (2 * Math.PI  * 60 );
+        }else{
+            hidari = true;
+            faceswing -= 1/ (2 * Math.PI  * 60 );
+            if(faceswing < Math.PI / 2 * -1){
+                hidari = false;
+            }
+        }
+
+//        pandagroup.rotation.set( 0 , faceswing  , 0 );
+
+        //ステップ数のインクリメント
+        step++;
+        //レンダリング
+        renderer.render(scene, camera);
+
+        //「loop()」関数の呼び出し
+        requestAnimationFrame(this.loop.bind(this));
+    }
+
+}
+
+
+</script>
+</head>
+<body>
+    <div id="main_frame"></div><!-- canvas要素を配置するdiv要素 -->
+</body>
+</html>
