@@ -225,12 +225,12 @@ plane.position.set(0, 0, 0);
 
         //消防本部
         var centerStreet = new THREE.Shape();
-        centerStreet.moveTo(-40, 60, 0);
-        centerStreet.lineTo(-63, 60, 0);
-        centerStreet.lineTo(-55, 0, 0);
-        centerStreet.lineTo(-63, 0, 0);
+        centerStreet.moveTo(-70, 0, 0);
+        centerStreet.lineTo(-60, 2, 0);
+        centerStreet.lineTo(-49, -70, 0);
+        centerStreet.lineTo(-59, -72, 0);
 
-        var extrudeSettings = { amount: 4, bevelSegments: 0 };
+        var extrudeSettings = { amount: 10, bevelSegments: 0 };
         var centerStreet3d = centerStreet.extrude( extrudeSettings );
         addGeometry( centerStreet3d, 0x5A5850, -0, -0, 0, null);
         //消防本部
