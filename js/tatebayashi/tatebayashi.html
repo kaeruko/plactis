@@ -122,96 +122,58 @@ var cityView = function(){
 
     cityView.prototype.makeMap = function() {
 
-    var object_tree_params = [
-        //南北に走る道路
-        { name:"centerStreet", type:"polygon", posi:[-40, -95, 1],
-              edges:[[22,118],
-                     [23,118], [38,0], [37,0]],
-              color: 0x5A5850
-        },
-        //南東の道路
-        { name:"DanchiStreet", type:"polygon", posi:[-40, -95, 1],
-              edges:[[33 , 36],
-                     [140, 36], [140, 35], [33 , 35]],
-              color: 0x5A5850
-        },
-        //東端の道路
-        { name:"DanchiStreet", type:"polygon", posi:[-40, -95, 1],
-              edges:[[-55, 60],
-                     [-56, 60], [-54, 0], [-56, 0]],
-              color: 0x5A5850
-        },
-        //消防署
-        { name:"fireofficeStreet", type:"polygon", posi:[0, 0, 1],
-              edges:[[-70, 0],
-                     [-60, 2], [-49, -70], [-59, -72]],
-              color: 0x999999,
-              amount: 10
-        },
+        var object_tree_params = [
+            { name: "mapGroup",
+                group:[
+                    //地図
+                    { name:"map", type:"plane", posi:[0, 0, 0],
+                      texture:{imgsrc:"images/map2.png", offset:[0, 0, 0]},
+                      width:200, height:200
+                    },
+                    //南北に走る道路
+                    { name:"centerStreet", type:"polygon", posi:[-40, -95, 1],
+                          edges:[[22,118],
+                                 [23,118], [38,0], [37,0]],
+                          color: 0x5A5850
+                    },
+                    //南東の道路
+                    { name:"DanchiStreet", type:"polygon", posi:[-40, -95, 1],
+                          edges:[[33 , 36],
+                                 [140, 36], [140, 35], [33 , 35]],
+                          color: 0x5A5850
+                    },
+                    //東端の道路
+                    { name:"DanchiStreet", type:"polygon", posi:[-40, -95, 1],
+                          edges:[[-55, 60],
+                                 [-56, 60], [-54, 0], [-56, 0]],
+                          color: 0x5A5850
+                    },
+                    //消防署
+                    { name:"fireofficeStreet", type:"polygon", posi:[0, 0, 1],
+                          edges:[[-70, 0],
+                                 [-60, 2], [-49, -70], [-59, -72]],
+                          color: 0x999999,
+                          amount: 10
+                    },
+                    //ネッツ道路
+                    { name:"netzStreet", type:"plane", posi:[0, 25, 1],
+                      texture:{imgsrc:"images/white.png", offset:[0, 0, 0], x:10, y:1, repeat:true},
+                      width:200, height:7
+                    },
+                    //シリンダー
+                    { name:"amedas", materialtype:"Phong", type:"cylinder", color:0xffffff,
+                    posi:[-35, 0, 1],rotate:[(Math.PI / 180 ) * 90, 0, 0],
+                      radiusTop:10, radiusBottom:8, height:10,radiusSegments:100
+                    },
 
-        //地図
-        { name:"map", type:"plane", posi:[0, 0, 0],
-          texture:{imgsrc:"images/map2.png", offset:[0, 0, 0]},
-          width:200, height:200
-        }
-
-
-    ];
-
-
-
-    var object_tree = {};
-        var pandaObject = new Object3DMaker();
-        var pandagroup = pandaObject.make(object_tree_params);
-    mapgroup.add(pandagroup);
-
-//マップの下書き
-//        var material = new THREE.MeshPhongMaterial( { color: 0x666666 } );
-
-
-// var texture = THREE.ImageUtils.loadTexture('images/map2.png');
-// //材質オブジェクトの宣言と生成
-// var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-
-// var geometry = new THREE.PlaneGeometry( 200, 200 );
-// var plane = new THREE.Mesh(geometry, material);
-// scene.add(plane);
-// plane.position.set(0, 0, 0);
+                ]   //end group
+            }   //end mapGropup
+        ];  //end object_tree_params
 
 
-        //テクスチャ
-        var texture = THREE.ImageUtils.loadTexture('images/white.png');
-        //異方性フィルダリング指数の指定
-        texture.anisotropy = renderer.getMaxAnisotropy();
-        //テクスチャラッピングの指定
-        texture.wrapS = THREE.RepeatWrapping; //x軸方向
-        texture.wrapT = THREE.RepeatWrapping; //y軸方向
-        //リピートの指定
-        texture.repeat.set( 10, 1 );
-
-        //材質オブジェクトの宣言と生成
-        var material = new THREE.MeshPhongMaterial( { color: 0xffffff, map: texture } );
-
-        //形状オブジェクトの宣言と生成
-        var geometry = new THREE.PlaneGeometry( 200, 7 );
-        //平面オブジェクトの生成
-        var plane = new THREE.Mesh(geometry, material);
-        //平面オブジェクトのシーンへの追加
-        scene.add(plane);
-        //平面オブジェクトの位置座標を設定
-        plane.position.set(0, 25, 1);
-        //アスファルト
-
-
-        //アメダス
-        var material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
-        var geometry = new THREE.CylinderGeometry(8, 8, 10, 10  );
-        var amedas = new THREE.Mesh(geometry, material);
-        scene.add(amedas);
-        amedas.position.set(-35, 0, 1);
-        amedas.rotation.set( (Math.PI / 180 ) * 90 , 0 , 0 );
-        //アメダス
-
+        var objmaker = new Object3DMaker();
+        var object3d = objmaker.make(object_tree_params);
+        mapgroup.add(object3d);
 
 
 //ストレージテスト
