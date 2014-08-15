@@ -3,38 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <title>暑いぞ！館林 ~最高気温で町おこし~</title>
-<script src="/three.js/three.js"></script>
-<script src="/three.js/controls/TrackballControls.js"></script>
+<script src="three.js/three.js"></script>
+<script src="three.js/controls/TrackballControls.js"></script>
+<script src="misc/js/Object3DMaker.js"></script>
 <style>
 *{padding:0px; margin:0px}
 div#main_frame{
-    width: 500px;  /* 横幅 */
-    height: 500px; /* 縦幅 */
+    width: 500px;
+    height: 500px;
     overflow:hidden;
 }
 </style>
 <script>
 "use strict";
 window.addEventListener("load", function() {
-    var cityobj = new cityView();
-    cityobj.threeStart();
+    var battleobj = new battle();
+    battleobj.drawStart();
 });
 
-var cityView = function(){
+function battle(){}
 
-    cityView.prototype.threeStart = function() {
-
+battle.prototype ={
+    drawStart: function(){
         this.initBattleTime();
-        this.initThree();  //Three.js初期化関数の実行
-        this.initObject(); //オブジェクト初期化関数の実行
-        this.initCamera(); //カメラ初期化関数の実行
+        this.initThree();
+        this.initObject();
+        this.initCamera();
         this.initLight();
-
         setInterval(this.loop.bind(this), 100);
-    }
+    },
 
-    //バトルタイム設定
-    cityView.prototype.initBattleTime = function() {
+    initBattleTime: function(){
         //開始時間の取得
         var startTime = new Date();
         var endTime = new Date();
@@ -43,110 +42,101 @@ var cityView = function(){
         var battleMinuts = 10;
         //現実世界より何分の1で進むか
         var erapsedSpeed = 86400 / ( 60 * battleMinuts );
-        //1分何秒か
-        var gameMinuts = ( 60 / ( 60 * erapsedSpeed ) ) * 60;
-        //1時間何秒か
-        var gameHour = gameMinuts * 60;
         //1バトル(1日)何秒か
-        var battleSecond = gameHour * 24;
+        var battleSecond = (( 60 / ( 60 * erapsedSpeed ) ) * 60) * 24 * 60;
         //終了時間計算
         var endDate =  startTime.getSeconds() + battleSecond;
         endTime.setSeconds(endDate);
         console.debug( endTime );
-    }
+    },
 
-    var renderer,    //レンダラーオブジェクト
-        scene,       //シーンオブジェクト
-        canvasFrame; //キャンバスフレームのDOM要素
+    getBattleTime: function(){
+        //現在時刻取得
+        var now = new Date();
+    },
 
-    cityView.prototype.initThree = function() {
+    initThree: function(){
         //キャンバスフレームDOM要素の取得
-        canvasFrame = document.getElementById('main_frame');
+        this.canvasFrame = document.getElementById('main_frame');
         //レンダラーオブジェクトの生成
-        renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
 
-        if (!renderer) alert('Three.js の初期化に失敗しました');
+        if (!this.renderer) alert('Three.js の初期化に失敗しました');
         //レンダラーのサイズの設定
-        renderer.setSize(canvasFrame.clientWidth, canvasFrame.clientHeight);
+        this.renderer.setSize(this.canvasFrame.clientWidth, this.canvasFrame.clientHeight);
         //キャンバスフレームDOM要素にcanvas要素を追加
-        canvasFrame.appendChild(renderer.domElement);
+        this.canvasFrame.appendChild(this.renderer.domElement);
 
         //レンダラークリアーカラーの設定
-        renderer.setClearColor(0xEEEEEE, 1.0);
+        this.renderer.setClearColor(0xEEEEEE, 1.0);
 
         //シーンオブジェクトの生成
-        scene = new THREE.Scene();
-    }
+        this.scene = new THREE.Scene();
+    },
 
-    var camera;    //カメラオブジェクト
-    var trackball;
-    cityView.prototype.initCamera = function() {
+    initCamera: function(){
         //カメラオブジェクトの生成
-        camera = new THREE.PerspectiveCamera(90, canvasFrame.clientWidth / canvasFrame.clientHeight, 1, 10000);
+        this.camera = new THREE.PerspectiveCamera(90, this.canvasFrame.clientWidth / this.canvasFrame.clientHeight, 1, 10000);
         //カメラの位置の設定
-        camera.position.set(0, 0, 100);
+        this.camera.position.set(0, 0, 100);
         //カメラの上ベクトルの設定
-        camera.up.set(0, 10, 0);
+        this.camera.up.set(0, 10, 0);
         //カメラの中心位置ベクトルの設定
-        camera.lookAt({ x: 0, y: 0, z: 0 }); //トラックボール利用時は自動的に無効
+        this.camera.lookAt({ x: 0, y: 0, z: 0 }); //トラックボール利用時は自動的に無効
 
         //トラックボールオブジェクトの宣言
-        trackball = new THREE.TrackballControls(camera, canvasFrame);
+        this.trackball = new THREE.TrackballControls(this.camera, this.canvasFrame);
 
         //トラックボール動作範囲のサイズとオフセットの設定
-        trackball.screen.width = canvasFrame.clientWidth;                        //横幅
-        trackball.screen.height = canvasFrame.clientHeight;                      //縦幅
-        trackball.screen.offsetLeft = canvasFrame.getBoundingClientRect().left;  //左オフセット
-        trackball.screen.offsetTop = canvasFrame.getBoundingClientRect().top;    //右オフセット
+        this.trackball.screen.width = this.canvasFrame.clientWidth;                        //横幅
+        this.trackball.screen.height = this.canvasFrame.clientHeight;                      //縦幅
+        this.trackball.screen.offsetLeft = this.canvasFrame.getBoundingClientRect().left;  //左オフセット
+        this.trackball.screen.offsetTop = this.canvasFrame.getBoundingClientRect().top;    //右オフセット
 
         //トラックボールの回転無効化と回転速度の設定
-        trackball.noRotate = false;
-        trackball.rotateSpeed = 4.0;
+        this.trackball.noRotate = false;
+        this.trackball.rotateSpeed = 4.0;
 
         //トラックボールの拡大無効化と拡大速度の設定
-        trackball.noZoom = false;
-        trackball.zoomSpeed = 4.0;
+        this.trackball.noZoom = false;
+        this.trackball.zoomSpeed = 4.0;
 
         //トラックボールのカメラ中心移動の無効化と中心速度の設定
-        trackball.noPan = false;
-        trackball.panSpeed = 1.0;
-        trackball.target = new THREE.Vector3(0, 0, 0);
+        this.trackball.noPan = false;
+        this.trackball.panSpeed = 1.0;
+        this.trackball.target = new THREE.Vector3(0, 0, 0);
 
         //トラックボールのスタティックムーブの有効化
-        trackball.staticMoving = true;
+        this.trackball.staticMoving = true;
         //トラックボールのダイナミックムーブ時の減衰定数
-        trackball.dynamicDampingFactor = 0.3;
-    }
+        this.trackball.dynamicDampingFactor = 0.3;
+    },
 
-    var axis; //軸オブジェクト
-    cityView.prototype.initObject = function() {
+    initObject: function(){
         //軸オブジェクトの生成
-        axis = new THREE.AxisHelper(100);
+        this.axis = new THREE.AxisHelper(100);
         //軸オブジェクトのシーンへの追加
-        scene.add(axis);
+        this.scene.add(this.axis);
         //軸オブジェクトの位置座標を設定
-        axis.position.set(0, 0, 0);
+        this.axis.position.set(0, 0, 0);
 
         //マップのグループを作る
-        mapgroup = new THREE.Object3D();
-        scene.add(mapgroup);
+        this.mapgroup = new THREE.Object3D();
+        this.scene.add(this.mapgroup);
 
         this.makeMap();
-    }
+    },
 
-    var mapgroup = null;
-
-    cityView.prototype.initLight = function() {
+    initLight: function(){
         //平行光源オブジェクトの生成
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1.0, 0);
         //平行光源オブジェクトの位置の設定
         directionalLight.position.set(0, 0, 1);
         //平行光源オブジェクトのシーンへの追加
-        scene.add(directionalLight);
-    }
+        this.scene.add(directionalLight);
+    },
 
-    cityView.prototype.makeMap = function() {
-
+    makeMap: function(){
         var object_tree_params = [
             { name: "mapGroup",
                 group:[
@@ -198,24 +188,19 @@ var cityView = function(){
 
         var objmaker = new Object3DMaker();
         var object3d = objmaker.make(object_tree_params);
-        mapgroup.add(object3d);
+        this.mapgroup.add(object3d);
+    },
 
-    }
-
-    var time = 0;
-    cityView.prototype.loop = function() {
-
-
+    loop: function(){
+         this.getBattleTime();
 
         //トラックボールによるカメラオブジェクトのプロパティの更新
-        trackball.update();
+        this.trackball.update();
         //レンダリング
-        renderer.render(scene, camera);
-
-    }
+        this.renderer.render(this.scene, this.camera);
+   },
 
 }
-
 
 </script>
 </head>
