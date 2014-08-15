@@ -23,11 +23,36 @@ window.addEventListener("load", function() {
 var cityView = function(){
 
     cityView.prototype.threeStart = function() {
+
+        this.initBattleTime();
         this.initThree();  //Three.js初期化関数の実行
         this.initObject(); //オブジェクト初期化関数の実行
         this.initCamera(); //カメラ初期化関数の実行
         this.initLight();
-        this.loop();       //無限ループ関数の実行
+
+        setInterval(this.loop.bind(this), 100);
+    }
+
+    //バトルタイム設定
+    cityView.prototype.initBattleTime = function() {
+        //開始時間の取得
+        var startTime = new Date();
+        var endTime = new Date();
+
+        //１バトル何分で終了か
+        var battleMinuts = 10;
+        //現実世界より何分の1で進むか
+        var erapsedSpeed = 86400 / ( 60 * battleMinuts );
+        //1分何秒か
+        var gameMinuts = ( 60 / ( 60 * erapsedSpeed ) ) * 60;
+        //1時間何秒か
+        var gameHour = gameMinuts * 60;
+        //1バトル(1日)何秒か
+        var battleSecond = gameHour * 24;
+        //終了時間計算
+        var endDate =  startTime.getSeconds() + battleSecond;
+        endTime.setSeconds(endDate);
+        console.debug( endTime );
     }
 
     var renderer,    //レンダラーオブジェクト
@@ -163,7 +188,7 @@ var cityView = function(){
                     //シリンダー
                     { name:"amedas", materialtype:"Phong", type:"cylinder", color:0xffffff,
                     posi:[-35, 0, 1],rotate:[(Math.PI / 180 ) * 90, 0, 0],
-                      radiusTop:10, radiusBottom:8, height:10,radiusSegments:100
+                      radiusTop:8, radiusBottom:8, height:10,radiusSegments:100
                     },
 
                 ]   //end group
@@ -175,154 +200,18 @@ var cityView = function(){
         var object3d = objmaker.make(object_tree_params);
         mapgroup.add(object3d);
 
-
-//ストレージテスト
-sessionStorage.setItem("test_key","aaa");
-
-
     }
 
-
-    function headBuild(ctx, x, y, width, height, radius)
-    {
-        ctx.moveTo( x, y + radius );
-
-        ctx.lineTo( x, y + height - radius );
-        ctx.quadraticCurveTo( x, y + height, x + radius, y + height );
-        ctx.lineTo( x + width - radius, y + height) ;
-        ctx.quadraticCurveTo( x + width, y + height, x + width, y + height - radius );
-        ctx.lineTo( x + width, y + radius );
-        ctx.quadraticCurveTo( x + width, y, x + width - radius, y );
-        ctx.lineTo( x + radius, y );
-        ctx.quadraticCurveTo( x, y, x, y + radius );
-        ctx.closePath();
-    }
-
-
-        //複製
-        // var load = plane.clone();
-        // scene.add(load);
-        // //平面オブジェクトの位置座標を設定
-        // load.position.set(0, -10, 1);
-
-
-
-    var pandagroup = null;
-    //パンダを1体作る
-    cityView.prototype.makePanda = function() {
-
-        //パンダのグループを作る
-        pandagroup = new THREE.Object3D();
-        scene.add(pandagroup);
-
-        //頭(顔/右耳/左耳)のグループを作る
-        headgroup = new THREE.Object3D();
-        pandagroup.add(headgroup);
-
-        //黒と白のマテリアルを作成
-        var materials_white = [];
-        materials_white[0] = new THREE.MeshBasicMaterial({color:0xffffff});
-        //材質オブジェクトの宣言と生成
-        var material_white = new THREE.MeshFaceMaterial(materials_white);
-
-        var materials_black = [];
-        materials_black[0] = new THREE.MeshBasicMaterial({color:0x000000});
-        //材質オブジェクトの宣言と生成
-        var material_black = new THREE.MeshFaceMaterial(materials_black);
-
-
-        //体
-        var body = this.makePandaParts(25, material_white, {x:0, y:0, z:0});
-        pandagroup.add(body);
-
-        //顔
-        var geometry = new THREE.SphereGeometry(18, 18, 18);
-        var pandatexture  = new THREE.ImageUtils.loadTexture('minipanda.png');
-        pandatexture.offset.x = 0.3;
-
-        //立方体オブジェクトの生成
-        face = new THREE.Mesh(geometry,
-            // material_white
-            new THREE.MeshPhongMaterial({
-                color: 0xff0000,
-                specular:0xff0000,
-                shininess:200,
-                 map: pandatexture
-            })
-        );
-        face.rotation.set( 0 , 0 , 0 );
-
-        //立方体オブジェクトの位置座標を設定
-        face.position.set(0, 30, 5);
-        //立方体オブジェクトのシーンへの追加
-        headgroup.add(face);
-
-        //右耳
-        var rightEar = this.makePandaParts(10, material_black, {x:15, y:46, z:5});
-        headgroup.add(rightEar);
-
-        //左耳
-        var leftEar = this.makePandaParts(10, material_black, {x:-15, y:46, z:5});
-        headgroup.add(leftEar);
-
-        //右手
-        var rightArm = this.makePandaParts(10, material_black, {x:15, y:10, z:10});
-        pandagroup.add(rightArm);
-
-        //左手
-        var leftArm = this.makePandaParts(10, material_black, {x:-15, y:10, z:10});
-        pandagroup.add(leftArm);
-
-        //右足
-        var rightLeg = this.makePandaParts(10, material_black, {x:20, y:-10, z:10});
-        pandagroup.add(rightLeg);
-
-        //左足
-        var leftLeg = this.makePandaParts(10, material_black, {x:-20, y:-10, z:10});
-        pandagroup.add(leftLeg);
-    }
-
-    //パンダのパーツを組み合わせる
-    cityView.prototype.makePandaParts = function(size, color, coords) {
-        var geometry = new THREE.SphereGeometry(size, 25, 25);
-        //立方体オブジェクトの生成
-        var part = new THREE.Mesh(geometry, color);
-        part.position.set( coords.x, coords.y, coords.z);
-
-        //立方体オブジェクトのシーンへの追加
-        return part;
-    }
-
-    ////////////////////////////////////////////////////////////////////
-    // 無限ループ関数の定義
-    ////////////////////////////////////////////////////////////////////
-    //グローバル変数の宣言
-    var step = 0; //ステップ数
-    var faceswing = 0;
-    var hidari = false;
+    var time = 0;
     cityView.prototype.loop = function() {
+
+
+
         //トラックボールによるカメラオブジェクトのプロパティの更新
         trackball.update();
-
-        if(faceswing < Math.PI / 2 && hidari == false){
-            faceswing += 1/ (2 * Math.PI  * 60 );
-        }else{
-            hidari = true;
-            faceswing -= 1/ (2 * Math.PI  * 60 );
-            if(faceswing < Math.PI / 2 * -1){
-                hidari = false;
-            }
-        }
-
-//        pandagroup.rotation.set( 0 , faceswing  , 0 );
-
-        //ステップ数のインクリメント
-        step++;
         //レンダリング
         renderer.render(scene, camera);
 
-        //「loop()」関数の呼び出し
-        requestAnimationFrame(this.loop.bind(this));
     }
 
 }
