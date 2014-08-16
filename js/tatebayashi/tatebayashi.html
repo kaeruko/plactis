@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>暑いぞ！館林 ~最高気温で町おこし~</title>
-<script src="three.js/three.js"></script>
-<script src="three.js/controls/TrackballControls.js"></script>
-<script src="misc/js/Object3DMaker.js"></script>
+<script src="lib/mrdoob-three.js-1769fbf/build/three.js"></script>
+<script src="lib/mrdoob-three.js-1769fbf/examples/js/controls/TrackballControls.js"></script>
+<script src="lib/misc/js/Object3DMaker.js"></script>
+<script src="font/electronic_highway_sign_regular.typeface.js"></script>
 <style>
 *{padding:0px; margin:0px}
 div#main_frame{
@@ -30,22 +31,22 @@ battle.prototype ={
         this.initObject();
         this.initCamera();
         this.initLight();
-        setInterval(this.loop.bind(this), 100);
+        setInterval(this.loop.bind(this), 300);
     },
 
     initBattleTime: function(){
         //開始時間の取得
-        var startTime = new Date();
+        this.startTime = new Date();
         var endTime = new Date();
 
         //１バトル何分で終了か
         var battleMinuts = 10;
         //現実世界より何分の1で進むか
-        var erapsedSpeed = 86400 / ( 60 * battleMinuts );
+        this.erapsedSpeed = 86400 / ( 60 * battleMinuts );
         //1バトル(1日)何秒か
-        var battleSecond = (( 60 / ( 60 * erapsedSpeed ) ) * 60) * 24 * 60;
+        var battleSecond = (( 60 / ( 60 * this.erapsedSpeed ) ) * 60) * 24 * 60;
         //終了時間計算
-        var endDate =  startTime.getSeconds() + battleSecond;
+        var endDate = this.startTime.getSeconds() + battleSecond;
         endTime.setSeconds(endDate);
         console.debug( endTime );
     },
@@ -53,6 +54,28 @@ battle.prototype ={
     getBattleTime: function(){
         //現在時刻取得
         var now = new Date();
+        //startからの差分で時間経過を取得
+        var diff = now.getTime() - this.startTime.getTime();
+        now.setTime( new Date('2008/5/1 0:00:00').getTime() + ( diff *  this.erapsedSpeed ) );
+//        console.debug( diff, now , now.getHours(), now.getMinutes());
+
+if(this.Text){
+    this.scene.remove(this.Text );
+    this.TextGeometry.dispose();
+    this.Material.dispose();
+}
+
+this.TextGeometry = new THREE.TextGeometry( now.getHours() +":"+ now.getMinutes() , {
+                size: 10, height: 1,
+                font: "electronic highway sign", style: "normal",
+                bevelThickness: 1, bevelSize: 1, bevelEnabled: false
+});
+this.Material = new THREE.MeshLambertMaterial( { color: 0xaaaaaa } );
+this.Text = new THREE.Mesh( this.TextGeometry, this.Material );
+
+this.scene.add( this.Text );
+this.Text.position.set(-90,80,1);
+
     },
 
     initThree: function(){
