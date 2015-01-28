@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <netdb.h>
 extern int h_errno;
-
+/**
+ * gethostbynameを使って正引きする
+ * 参照
+ * http://d.hatena.ne.jp/mozxxx/20110512
+ */
 int main(int argc, char *argv[]){
 
 	char *hostname;
