@@ -11,7 +11,7 @@ var kVector = function(canvasId, scale){
 
 kVector.prototype.init = function(){
     this.kc.ctx.clearRect( 0, 0, this.kc.canvasWidth, this.kc.canvasHeight);
-    this.kc.vectorGrid();
+    this.kc.grid_text();
 }
 
 /**
@@ -37,6 +37,17 @@ kVector.prototype.showlenText = function(len, point, color){
     var text = "wid:" + (this.kc.r(len[0],100)) +" , hgt:" + (this.kc.r(len[1],100));
     this.kc.strokeText(text, point[0] + 0.2 , point[1] + 0.2, color, 15);
 }
+
+kVector.prototype.setPoint = function(e){
+    this.point = this.kc.scaledown([e.offsetX,e.offsetY]);
+    this.kc.fillCircle(this.point, 0.05, Math.PI * 2, "red", true);
+    var text = "x:" + this.point[0] +" , y:" + this.point[1];
+    this.kc.strokeText(text, this.point[0] + 0.2 , this.point[1] + 0.2, "rgb(255, 104, 104)", 15);
+console.log(this.point)
+// fillRect
+}
+
+
 
 kVector.prototype.setStartPoint = function(e){
     this.startPoint = this.kc.scaledown([e.offsetX,e.offsetY]);

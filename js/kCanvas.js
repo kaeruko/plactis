@@ -87,9 +87,33 @@ kCanvas.prototype.vectorGrid = function() {
     };
 }
 
+
+kCanvas.prototype.grid_text = function() {
+    //透明に
+    this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeight);
+    this.ctx.fillStyle = "rgb(0, 0, 80)";
+    //塗りつぶし
+    this.ctx.fillRect( 0, 0, this.canvasWidth, this.canvasHeight);
+
+    for (var i = -1 * this.maxX / 2; i < +1 * this.maxX / 2; i++) {
+        var color =   "rgb(80, 80, 80)" ;
+        //x軸(x軸が動いているので)
+        this.stroke([ - 1 * this.maxX, i], [ +1 * this.maxX, i], color);
+        this.stroke([ i, - 1 * this.maxX], [ i, +1 * this.maxX], color);
+        this.strokeText(i, i , - this.maxX / 2 + 0.9 , "rgb(255, 255, 102)",  this.scale / 30);
+        this.strokeText(i, this.maxY / 2 - 0.9, i, "rgb(255, 0, 102)",  this.scale / 30);
+    };
+    //真ん中のx軸を引く
+    this.stroke([ -1 * this.maxX / 2 , 0 ],[ +1 * this.maxX / 2 , 0 ], "rgb(153, 255, 255)" );
+    this.stroke([ 0, -1 * this.maxX / 2 ],[ 0, +1 * this.maxX / 2 , 0 ], "rgb(153, 255, 255)" );
+
+}
+
+
 kCanvas.prototype.strokeText__ = function(text, x, y, color, size) {
     this.ctx.strokeStyle = color;
-    this.ctx.font = size + "px 'ヒラギノ角ゴ'";
+    // this.ctx.font = size + "px 'ヒラギノ角ゴ'";
+    this.ctx.font = 10 + "px 'ヒラギノ角ゴ'";
     this.ctx.strokeText(text, x, y);
 }
 
