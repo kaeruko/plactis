@@ -19,11 +19,19 @@
 "use strict";
 var canvasId = "addVector";
 
-var kv = new kVector(canvasId, 30);
+var kv = new kVector(canvasId, 10);
 kv.init();
 kv.kc.canvas.addEventListener("mousedown",function(e){
-   kv.setPoint(e);
+   kv.setRectStartPoint(e);
   }, false);
+kv.kc.canvas.addEventListener("mouseup",function(e){
+   kv.setRectEndPoint(e);
+   kv.setVector();
+   if(kv.showAddVector()){
+//     var kv = new kVector(canvasId, 100);
+   }
+  }, false);
+
 </script>
     </body>
 </html>

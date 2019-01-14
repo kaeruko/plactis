@@ -38,7 +38,7 @@ kCanvas.prototype.adjustPoint = function(defaultpoint) {
 kCanvas.prototype.scaledown = function(defaultpoint) {
     var x =  ( defaultpoint[0] - ( this.canvasWidth  / 2 )) / this.scale;
     var y =  ( defaultpoint[1] - ( this.canvasHeight / 2 )) / this.scale;
-    return [x,-y];
+    return [Math.round(x),Math.round(-y)];
 }
 
 kCanvas.prototype.adjustSize = function(size){
@@ -113,7 +113,7 @@ kCanvas.prototype.grid_text = function() {
 kCanvas.prototype.strokeText__ = function(text, x, y, color, size) {
     this.ctx.strokeStyle = color;
     // this.ctx.font = size + "px 'ヒラギノ角ゴ'";
-    this.ctx.font = 10 + "px 'ヒラギノ角ゴ'";
+    this.ctx.font = 12 + "px 'ヒラギノ角ゴ'";
     this.ctx.strokeText(text, x, y);
 }
 
