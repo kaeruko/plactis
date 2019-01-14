@@ -52,32 +52,32 @@ console.log(this.point)
 kVector.prototype.setRectStartPoint = function(e){
     this.rectPoint1 = this.kc.scaledown([e.offsetX,e.offsetY]);
 // this.rectPoint1 = [0,0];
-    this.kc.fillCircle(this.rectPoint1, 0.05, Math.PI * 2, "red", true);
-    var text = "1:x:" + this.rectPoint1[0] +" , y:" + this.rectPoint1[1];
-    this.kc.strokeText(text, this.rectPoint1[0] + 0.2 , this.rectPoint1[1] + 0.2, "rgb(255, 104, 104)", 15);
+    this.kc.fillCircle(this.rectPoint1, 0.5, Math.PI * 2, "rgb(255, 0, 0)", true);
+    var text = "x:" + this.rectPoint1[0] +" , y:" + this.rectPoint1[1];
+    this.kc.strokeText(text, this.rectPoint1[0] + 0.2 , this.rectPoint1[1] + 0.2, "rgb(255, 0, 0)", 15);
 }
 
 kVector.prototype.setRectEndPoint = function(e){
     this.rectPoint2 = this.kc.scaledown([e.offsetX,e.offsetY]);
 // this.rectPoint2 = [0,1];
-    this.kc.fillCircle(this.rectPoint2, 0.05, Math.PI * 2, "red", true);
-    var text = "2:x:" + this.rectPoint2[0] +" , y:" + this.rectPoint2[1];
+    this.kc.fillCircle(this.rectPoint2, 0.5, Math.PI * 2, "rgb(255, 104, 104)", true);
+    var text = "x:" + this.rectPoint2[0] +" , y:" + this.rectPoint2[1];
     this.kc.strokeText(text, this.rectPoint2[0] + 0.2 , this.rectPoint2[1] + 0.2, "rgb(255, 104, 104)", 15);
 
     this.rectPoint3 = [(this.rectPoint2[0] - this.rectPoint2[1] + this.rectPoint1[1]),
     (this.rectPoint2[1] + this.rectPoint2[0] - this.rectPoint1[0])];
 
-    this.kc.fillCircle(this.rectPoint3, 0.05, Math.PI * 2, "white", true);
-    text = "3:x:" + this.rectPoint3[0] +" , y:" + this.rectPoint3[1];
+    this.kc.fillCircle(this.rectPoint3, 0.5, Math.PI * 2, "rgb(255, 200, 200)", true);
+    text = "x:" + this.rectPoint3[0] +" , y:" + this.rectPoint3[1];
 
-    this.kc.strokeText(text, this.rectPoint3[0] - 0.4 , this.rectPoint3[1] - 0.4, "white", 15);
+    this.kc.strokeText(text, this.rectPoint3[0] + 1.0 , this.rectPoint3[1] - 0.4, "rgb(255, 200, 200)", 15);
 
 
     this.rectPoint4 = [(this.rectPoint1[0] - this.rectPoint2[1] + this.rectPoint1[1]),
     (this.rectPoint1[1] + this.rectPoint2[0] - this.rectPoint1[0])]
-    this.kc.fillCircle(this.rectPoint4, 0.05, Math.PI * 2, "white", true);
-    text = "4:x:" + this.rectPoint4[0] +" , y:" + this.rectPoint4[1];
-    this.kc.strokeText(text, this.rectPoint4[0] - 0.4 , this.rectPoint4[1] - 0.4, "white", 15);
+    this.kc.fillCircle(this.rectPoint4, 0.5, Math.PI * 2, "white", true);
+    text = "x:" + this.rectPoint4[0] +" , y:" + this.rectPoint4[1];
+    this.kc.strokeText(text, this.rectPoint4[0] + 1.0 , this.rectPoint4[1] - 0.4, "white", 15);
 console.log(this.rectPoint4  );
 
 
